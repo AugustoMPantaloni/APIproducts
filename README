@@ -1,0 +1,37 @@
+                                Products API
+Esta es una API RESTful para la gestión de productos, que permite realizar operaciones básicas como obtener, agregar, actualizar y eliminar productos. La API utiliza Node.js con el framework Express y gestiona los datos mediante un archivo JSON. Es ideal para practicar y entender los conceptos de la creación de APIs sin necesidad de una base de datos.
+
+####    Características
+
+-   Obtener todos los productos
+-   Obtener un producto por su ID
+-   Agregar un nuevo producto
+-   Actualizar un producto existente
+-   Eliminar un producto
+-   Los datos de productos se guardan en un archivo JSON (products.json)(Proximamente en base de datos).
+
+####    Tecnologías
+
+-   Node.js: Entorno de ejecución JavaScript del lado del servidor.
+-   Express: Framework web para Node.js.
+-   fs.promises: Para manejar la lectura y escritura asincrónica de archivos JSON.
+
+####    Instalación
+-   Clona este repositorio:
+git clone https://github.com/tu-usuario/products-api.git
+
+-   Navega al directorio del proyecto:
+cd products-api
+
+-   Instala las dependencias:
+npm install
+
+-   Para ejecutar el servidor en modo desarrollo, usa:
+npm run dev
+Esto ejecutará el servidor usando nodemon, que recarga automáticamente el servidor cuando haces cambios en el código.
+
+-   Para ejecutar el servidor en modo producción, usa:
+npm start
+
+####    Contribuciones
+Si tienes ideas para mejorar esta API o encuentras algún error, no dudes en abrir un issue o enviar un pull request.
