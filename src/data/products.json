@@ -1,3 +1,16 @@
-[{
-    
-}]
+[
+  {
+    "id": "4f500b8c-8be1-4a0f-af51-3699a8992162",
+    "title": "Producto modificado",
+    "description": "Esta es una descripción modificada",
+    "code": "prueba1222",
+    "price": 150,
+    "stock": 20,
+    "category": "Electrónica Modificada",
+    "thumbnails": [
+      "imagen3.jpg",
+      "imagen4.jpg"
+    ],
+    "status": true
+  }
+]

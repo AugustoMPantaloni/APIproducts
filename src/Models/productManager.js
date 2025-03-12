@@ -1,11 +1,12 @@
 const { error } = require("console");
 const fs = require("fs/promises");
-const {v4: uuidv4} = require("uuid") //Identificador unico para los ID de los productos
+const path = require("path");
+const { v4: uuidv4, validate: validateUUID } = require("uuid"); //Identificador unico para los ID de los productos
 
 class ProductManager {
     constructor(){
         this.products = []
-        this.filePath = "./data/products.json"
+        this.filePath = path.join(__dirname, "../data/products.json");
     }
 //Lee el archivo de productos
     async readProducts(){
@@ -40,16 +41,21 @@ class ProductManager {
             throw new Error(`El codigo ${code} ya existe`)
         }
     }
-    //Busqueda de producto por su ID(Metodo creado para evitar la repeticion, facilitando el mantenimiento)
+//Busqueda de producto por su ID(Metodo creado para evitar la repeticion, facilitando el mantenimiento)
     async findProductById(id){
-        const product = this.products.find(p => p.id === id)
-        if(!product){
-            throw new Error(`No existe ningun producto con ID ${id}`);
-        }
-        return product;
+            if(!validateUUID(id)){
+                throw new Error("El ID proporcionado no es valido");
+            }
+
+            const product = this.products.find(p => p.id === id)
+            
+            if(!product){
+                throw new Error(`No existe ningun producto con ID ${id}`);
+            }
+            return product;
     }
 //Crea un nuevo producto
-    async createProduct(title, description, code, price, stock, status,category, thumbnails=[]){
+    async createProduct(title, description, code, price, stock, status, category, thumbnails=[]){
         try{
             await this.readProducts();
 
@@ -61,11 +67,11 @@ class ProductManager {
             if (!category) throw new Error("La categoría es obligatoria");
             if (!status) throw new Error("El status es obligatorio");
 
-            if(isNaN(price) && price <= 0){
+            if(isNaN(price) || price <= 0){
                 throw new Error("El precio debe ser un numero y mayor a 0");
             }
 
-            if(isNaN(stock) && price <= 0){
+            if(isNaN(stock) || stock <= 0){
                 throw new Error("El Stock debe ser un numero y mayor a 0")
             }
 
@@ -102,6 +108,7 @@ class ProductManager {
 //Muestra todos los productos
     async getAllProducts(){
         try{
+            await this.readProducts();
             const products = this.products
             if(products.length === 0){
                 throw new Error("No existen productos");
@@ -113,14 +120,9 @@ class ProductManager {
         }
     }
 //Muestra el producto filtrado por su ID
-    async getProductById(id){
-        try{
-            await this.readProducts();
-            return this.findProductById(id)
-        }catch(error){
-            console.error("Error al obtener el producto", error.message)
-            return { error: error.message }
-        }
+    async getProductById(id) {
+        await this.readProducts(); 
+        return this.findProductById(id); 
     }
 //Borra un producto filtrado por su ID
     async deleteProduct(id){
@@ -128,6 +130,10 @@ class ProductManager {
             await this.readProducts();
 
             const product = this.products;
+
+            if(!validateUUID(id)){
+                throw new Error(`El ID ${id} no es valido`)
+            }
 
             const productIndex = product.findIndex(p => p.id === id);
             if(productIndex === -1){
@@ -150,7 +156,7 @@ class ProductManager {
         try{
             await this.readProducts();
 
-            const productById = await this.findProductById(id)
+            const modProduct = await this.findProductById(id)
 
             if(!updateData || Object.keys(updateData).length === 0 || typeof updateData !== "object") {
                 throw new Error("Los datos de actualización deben ser un objeto no vacio");
@@ -162,12 +168,12 @@ class ProductManager {
     
             for (const key in updateData) {
                 if (updateData.hasOwnProperty(key)) {
-                    productById[key] = updateData[key];
+                    modProduct[key] = updateData[key];
                 }
             }
     
             await this.saveProducts();
-            return productById;
+            return modProduct;
         }catch(error){
             console.error(`Ocurrio un error al modificar el producto con ID ${id}`, error.message);
             return { error: error.message }
@@ -175,47 +181,5 @@ class ProductManager {
     }
 }
 
-//Pruebas hecha por IA para validar que todos los metodos funcionen, !!!todavia no testeado¡¡¡
-(async () => {
-    const manager = new ProductManager();
-
-    try {
-        // Crear un producto
-        const newProduct = await manager.createProduct(
-            "Producto 1",
-            "Descripción del producto 1",
-            "CODE123",
-            100,
-            10,
-            true,
-            "Categoría 1",
-            ["imagen1.jpg", "imagen2.jpg"]
-        );
-        console.log("Producto creado:", newProduct);
-
-        // Obtener todos los productos
-        const allProducts = await manager.getAllProducts();
-        console.log("Todos los productos:", allProducts);
-
-        // Obtener un producto por ID
-        const productById = await manager.getProductById(newProduct.id);
-        console.log("Producto por ID:", productById);
-
-        // Modificar un producto
-        const updatedProduct = await manager.modProduct(newProduct.id, { price: 150 });
-        console.log("Producto modificado:", updatedProduct);
-
-        // Eliminar un producto
-        const deletedProduct = await manager.deleteProduct(newProduct.id);
-        console.log("Producto eliminado:", deletedProduct);
-
-        // Verificar que el producto fue eliminado
-        const remainingProducts = await manager.getAllProducts();
-        console.log("Productos restantes:", remainingProducts);
-    } catch (error) {
-        console.error("Error durante las pruebas:", error.message);
-    }
-})();
-
-module.export = ProductManager;
+module.exports= ProductManager;
 

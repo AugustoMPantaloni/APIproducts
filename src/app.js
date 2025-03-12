@@ -1,14 +1,18 @@
 const express = require ("express");
+const app = express();
+const routerProducts = require ("./Routers/products")
+const routerCarts = require ("./Routers/carts")
 
-const app = express()
+app.use(express.json());
+
+app.use("/api/products", routerProducts)
+app.use("/api/carts", routerCarts);
 
 app.get("/", (req, res)=>{
     res.send("Servidor en linea");
 })
 
-app.use(express.json());
-
-const PORT = 3000;
+const PORT = 8080;
 app.listen (PORT,()=>{
     console.log(`Servidor corriendo en puerto ${PORT}`);
 })
