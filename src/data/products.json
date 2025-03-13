@@ -1,16 +1,86 @@
 [
   {
-    "id": "4f500b8c-8be1-4a0f-af51-3699a8992162",
-    "title": "Producto modificado",
-    "description": "Esta es una descripción modificada",
-    "code": "prueba1222",
-    "price": 150,
-    "stock": 20,
-    "category": "Electrónica Modificada",
+    "id": "ea6fc0e1-df13-4dd2-8649-94953d24e5c5",
+    "title": "Smartphone X Pro",
+    "description": "Teléfono inteligente con pantalla OLED de 6.5 pulgadas y cámara de 108 MP.",
+    "code": "SPXPRO2025",
+    "price": 799.99,
+    "stock": 50,
+    "category": "Electrónica",
     "thumbnails": [
-      "imagen3.jpg",
-      "imagen4.jpg"
+      "https://example.com/images/smartphone-front.jpg",
+      "https://example.com/images/smartphone-back.jpg"
     ],
-    "status": true
+    "status": "available"
+  },
+  {
+    "id": "e8cb35d1-2902-49ab-92c7-0cc78ea5634b",
+    "title": "Auriculares Inalámbricos ZX",
+    "description": "Auriculares Bluetooth con cancelación de ruido y batería de 30 horas.",
+    "code": "AURZX2025",
+    "price": 149.99,
+    "stock": 120,
+    "category": "Audio",
+    "thumbnails": [
+      "https://example.com/images/auriculares-front.jpg",
+      "https://example.com/images/auriculares-case.jpg"
+    ],
+    "status": "available"
+  },
+  {
+    "id": "32a2b94e-221b-4c40-a324-850964dab75f",
+    "title": "Laptop UltraBook 15",
+    "description": "Laptop liviana con procesador i7, 16GB de RAM y SSD de 512GB.",
+    "code": "LAPUB15-2025",
+    "price": 1299.99,
+    "stock": 30,
+    "category": "Computadoras",
+    "thumbnails": [
+      "https://example.com/images/laptop-front.jpg",
+      "https://example.com/images/laptop-keyboard.jpg"
+    ],
+    "status": "available"
+  },
+  {
+    "id": "08220e87-68a4-4124-9f41-f3e724fbfe31",
+    "title": "Reloj Inteligente FitPro",
+    "description": "Smartwatch con monitoreo de salud, GPS y resistencia al agua.",
+    "code": "FITPRO2025",
+    "price": 199.99,
+    "stock": 75,
+    "category": "Wearables",
+    "thumbnails": [
+      "https://example.com/images/reloj-front.jpg",
+      "https://example.com/images/reloj-back.jpg"
+    ],
+    "status": "available"
+  },
+  {
+    "id": "94263983-bed5-48cc-9c38-c548eade2e8a",
+    "title": "Teclado Mecánico RGB",
+    "description": "Teclado mecánico con retroiluminación RGB y switches intercambiables.",
+    "code": "KEYRGB2025",
+    "price": 89.99,
+    "stock": 100,
+    "category": "Periféricos",
+    "thumbnails": [
+      "https://example.com/images/teclado-rgb.jpg",
+      "https://example.com/images/teclado-side.jpg"
+    ],
+    "status": "available"
+  },
+  {
+    "id": "8282ef42-9eac-4717-9a77-90b52b24e408",
+    "title": "Silla Gamer Elite",
+    "description": "Silla ergonómica con soporte lumbar, reposabrazos ajustables y reclinable 180°.",
+    "code": "GAMERCHAIR2025",
+    "price": 249.99,
+    "stock": 40,
+    "category": "Muebles",
+    "thumbnails": [
+      "https://example.com/images/silla-gamer.jpg",
+      "https://example.com/images/silla-reclinada.jpg"
+    ],
+    "status": "available"
   }
 ]

@@ -1,0 +1,110 @@
+/* public/css/styleProductsHandlebars.css */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente moderna */
+    background-color: #f0f2f5; /* Fondo más claro y moderno */
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: #1a1a1a; /* Color más oscuro para mayor contraste */
+    font-size: 2.2rem; /* Título un poco más grande */
+    margin-bottom: 30px;
+    font-weight: 600; /* Texto semibold */
+    letter-spacing: -0.5px; /* Espaciado de letras más ajustado */
+}
+
+.product-list {
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Cuadrícula flexible */
+    gap: 25px; /* Más espacio entre productos */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.product-item {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    border-radius: 12px; /* Bordes más redondeados */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
+    transition: transform 0.2s, box-shadow 0.2s;
+    list-style: none; /* Elimina el punto de la lista principal */
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más intensa al hacer hover */
+}
+
+.product-item h3 {
+    color: #2c3e50;
+    font-size: 1.5rem; /* Título un poco más grande */
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-weight: 600; /* Texto semibold */
+}
+
+.product-item p {
+    margin: 8px 0; /* Espaciado ligeramente mayor */
+    font-size: 0.95rem; /* Texto un poco más grande */
+    color: #555;
+    line-height: 1.5; /* Mejor legibilidad */
+}
+
+.product-item p strong {
+    color: #2c3e50;
+    font-weight: 600; /* Texto semibold */
+}
+
+.thumbnail-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Más espacio entre imágenes */
+    padding: 0;
+    margin-top: 15px;
+    list-style: none;
+    align-items: center;
+}
+
+.thumbnail-list li {
+    list-style: none;
+}
+
+.thumbnail-img {
+    max-width: 80px;
+    border-radius: 8px; /* Bordes más redondeados */
+    border: 1px solid #ddd;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.thumbnail-img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra al hacer hover */
+}
+
+/* Efecto de carga suave para los productos */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.product-item {
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.product-item:nth-child(1) { animation-delay: 0.1s; }
+.product-item:nth-child(2) { animation-delay: 0.2s; }
+.product-item:nth-child(3) { animation-delay: 0.3s; }
+.product-item:nth-child(4) { animation-delay: 0.4s; }
+.product-item:nth-child(5) { animation-delay: 0.5s; }
