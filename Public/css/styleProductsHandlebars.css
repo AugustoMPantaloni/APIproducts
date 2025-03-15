@@ -85,6 +85,29 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
+.button-delete {
+    margin-top: 10px;
+    background-color: #d9534f; /* Rojo fuerte */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.button-delete:hover {
+    background-color: #c9302c; /* Rojo más oscuro */
+    transform: scale(1.05);
+}
+
+.button-delete:active {
+    background-color: #ac2925; /* Rojo aún más oscuro */
+    transform: scale(0.95);
+}
+
 
 @keyframes fadeIn {
     from {

@@ -12,9 +12,11 @@
                     <li><img src="/images/{{this}}" alt="thumbnail" class="thumbnail-img"></li>
                 {{/each}}
             </ul>
+            <button data-id="{{this.id}}" class="button-delete">Eliminar</button>
         </li>
     {{/each}}
 </ul>
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
@@ -38,14 +40,31 @@
                 <p><strong>Stock:</strong> ${product.stock}</p>
                 <p><strong>Fotos:</strong></p>
                 <ul class="thumbnail-list">
-                    ${product.thumbnails.map(thumbnail => `<li><img src="/images/${thumbnail}" alt="thumbnail" class="thumbnail-img"></li>`).join('')}
+                    ${product.thumbnails.map(thumbnail => 
+                        `<li><img src="/images/${thumbnail}" alt="thumbnail" class="thumbnail-img"></li>`
+                    ).join('')}
                 </ul>
+                <button data-id="${product.id}" class="button-delete">Eliminar</button>
             `;
             productList.appendChild(productItem);
         });
     });
 
-    socket.on('getProductById', (product) => {
-        console.log('Producto recibido:', product);
+    document.querySelector('.product-list').addEventListener('click', async (event) => {
+        if (event.target.classList.contains('button-delete')) {
+            const productId = event.target.dataset.id;
+            try {
+                const response = await fetch(`/realtimeproducts/${productId}`, {
+                    method: 'DELETE',
+                });
+                if (!response.ok){
+                throw new Error('Error al eliminar')};
+                
+                console.log('Producto eliminado');
+                socket.emit('requestUpdate'); 
+            } catch (error) {
+                console.error('Error:', error.message);
+            }
+        }
     });
 </script>
