@@ -12,6 +12,7 @@ routerProducts.get("/", async (req, res)=>{
         res.status(200).json({Data: products})
         
     }catch(error){
+        console.error("Error en la ruta GET /", error.message);
         res.status(500).json({Mensaje: "Error interno del servidor."})
     }
 })

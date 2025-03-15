@@ -1,7 +1,6 @@
-/* public/css/styleProductsHandlebars.css */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente moderna */
-    background-color: #f0f2f5; /* Fondo más claro y moderno */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background-color: #f0f2f5; 
     margin: 0;
     padding: 20px;
     color: #333;
@@ -9,18 +8,18 @@ body {
 
 h1 {
     text-align: center;
-    color: #1a1a1a; /* Color más oscuro para mayor contraste */
-    font-size: 2.2rem; /* Título un poco más grande */
+    color: #1a1a1a; 
+    font-size: 2.2rem; 
     margin-bottom: 30px;
-    font-weight: 600; /* Texto semibold */
-    letter-spacing: -0.5px; /* Espaciado de letras más ajustado */
+    font-weight: 600; 
+    letter-spacing: -0.5px; 
 }
 
 .product-list {
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Cuadrícula flexible */
-    gap: 25px; /* Más espacio entre productos */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 25px; 
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -29,41 +28,41 @@ h1 {
     background-color: #ffffff;
     border: 1px solid #e0e0e0;
     padding: 20px;
-    border-radius: 12px; /* Bordes más redondeados */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
+    border-radius: 12px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
     transition: transform 0.2s, box-shadow 0.2s;
-    list-style: none; /* Elimina el punto de la lista principal */
+    list-style: none; 
 }
 
 .product-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más intensa al hacer hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
 }
 
 .product-item h3 {
     color: #2c3e50;
-    font-size: 1.5rem; /* Título un poco más grande */
+    font-size: 1.5rem; 
     margin-top: 0;
     margin-bottom: 12px;
-    font-weight: 600; /* Texto semibold */
+    font-weight: 600; 
 }
 
 .product-item p {
-    margin: 8px 0; /* Espaciado ligeramente mayor */
-    font-size: 0.95rem; /* Texto un poco más grande */
+    margin: 8px 0; 
+    font-size: 0.95rem; 
     color: #555;
-    line-height: 1.5; /* Mejor legibilidad */
+    line-height: 1.5;
 }
 
 .product-item p strong {
     color: #2c3e50;
-    font-weight: 600; /* Texto semibold */
+    font-weight: 600; 
 }
 
 .thumbnail-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px; /* Más espacio entre imágenes */
+    gap: 10px; 
     padding: 0;
     margin-top: 15px;
     list-style: none;
@@ -76,17 +75,17 @@ h1 {
 
 .thumbnail-img {
     max-width: 80px;
-    border-radius: 8px; /* Bordes más redondeados */
+    border-radius: 8px;
     border: 1px solid #ddd;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .thumbnail-img:hover {
     transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra al hacer hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
-/* Efecto de carga suave para los productos */
+
 @keyframes fadeIn {
     from {
         opacity: 0;

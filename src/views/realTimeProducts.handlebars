@@ -1,4 +1,3 @@
-<h1>Lista de productos</h1>
 <ul class="product-list">
     {{#each products}}
         <li class="product-item">
@@ -16,3 +15,37 @@
         </li>
     {{/each}}
 </ul>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    socket.on('connect', () => {
+        console.log('Conectado al servidor de Socket.IO');
+    });
+
+    socket.on('getAllProducts', (products) => {
+        const productList = document.querySelector('.product-list');
+        productList.innerHTML = ''; 
+
+        products.forEach(product => {
+            const productItem = document.createElement('li');
+            productItem.classList.add('product-item');
+            productItem.innerHTML = `
+                <h3>${product.title}</h3>
+                <p><strong>Categoría:</strong> ${product.category}</p>
+                <p><strong>Descripción:</strong> ${product.description}</p>
+                <p><strong>Precio:</strong> $${product.price}</p>
+                <p><strong>Stock:</strong> ${product.stock}</p>
+                <p><strong>Fotos:</strong></p>
+                <ul class="thumbnail-list">
+                    ${product.thumbnails.map(thumbnail => `<li><img src="/images/${thumbnail}" alt="thumbnail" class="thumbnail-img"></li>`).join('')}
+                </ul>
+            `;
+            productList.appendChild(productItem);
+        });
+    });
+
+    socket.on('getProductById', (product) => {
+        console.log('Producto recibido:', product);
+    });
+</script>
