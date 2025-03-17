@@ -1,6 +1,6 @@
 const express = require ("express");
 const routerRealTimeProducts = express.Router();
-
+const upload = require ("../config/multer")
 
 const ProductManager = require ("../Models/productManager");
 const instanciaProducts = new ProductManager();
@@ -40,9 +40,10 @@ module.exports = (io) => {
     })
 
     //Ruta POST para agregar un producto
-    routerRealTimeProducts.post("/", async (req, res)=>{
+    routerRealTimeProducts.post("/", upload.array("thumbnails"), async (req, res)=>{
         try{
-            const { title, description, code, price, stock, status,category, thumbnails} = req.body;
+            const { title, description, code, price, stock, status,category} = req.body;
+            const thumbnails = req.files?.map(file => file.path) || [];
 
             const newProduct = await instanciaProducts.createProduct(title, description, code, price, stock, status,category, thumbnails)
             if(newProduct.error){
@@ -50,7 +51,7 @@ module.exports = (io) => {
             }
             const products = await instanciaProducts.getAllProducts();
             io.emit("getAllProducts", products); 
-            res.status(201).json({ Mensaje: "Nuevo producto creado", newProduct });
+            res.render("realTimeProducts", { products }); 
         }catch(error){
             console.error("Error en la ruta POST /:", error.message)
             res.status(500).json({mensaje:"Error interno del servidor"})

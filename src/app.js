@@ -13,18 +13,9 @@ const {Server} = require ("socket.io");
 const server = http.createServer(app)
 const io = new Server(server);
 
-io.on("connection", (socket)=>{
-    console.log("Nuevo cliente conectado")
-
-    socket.on("disconnect",()=>{
-        console.log("Cliente desconectado")
-    })
-})
-
-//Middleware para parseo de JSON
+//Middleware 
 app.use(express.json());
-
-//Configuracion para servir archivos estaticos
+app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname, "..", "public"))); 
 
 //Configuracion Handlebars
