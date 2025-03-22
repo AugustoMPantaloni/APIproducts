@@ -1,4 +1,4 @@
-const productManager = require("../Models/productManager");
+const productManager = require("../dao/productManager");
 const instanciaProducts = new productManager();
 
 const getProducts = async (req, res) => {

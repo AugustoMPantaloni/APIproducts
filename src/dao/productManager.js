@@ -13,9 +13,6 @@ class ProductManager {
         try{
             const data = await fs.readFile(this.filePath,"utf8")
             
-            if(data.length === 0){
-                throw new Error("El archivo de productos esta vacio")
-            }
             this.products = JSON.parse(data)
 
             return{succes : "Archivo de productos cargado correctamente."}
@@ -43,15 +40,8 @@ class ProductManager {
     }
 //Busqueda de producto por su ID(Metodo creado para evitar la repeticion, facilitando el mantenimiento)
     async findProductById(id){
-            if(!validateUUID(id)){
-                throw new Error("El ID proporcionado no es valido");
-            }
-
             const product = this.products.find(p => p.id === id)
             
-            if(!product){
-                throw new Error(`No existe ningun producto con ID ${id}`);
-            }
             return product;
     }
 //Crea un nuevo producto
@@ -59,32 +49,12 @@ class ProductManager {
         try{
             await this.readProducts();
 
-            if (!title) throw new Error("El título es obligatorio");
-            if (!description) throw new Error("La descripción es obligatoria");
-            if (!code) throw new Error("El código es obligatorio");
-            if (!price) throw new Error("El precio es obligatorio");
-            if (!stock) throw new Error("El stock es obligatorio");
-            if (!category) throw new Error("La categoría es obligatoria");
-            if (!status) throw new Error("El status es obligatorio");
-
-            if(isNaN(price) || price <= 0){
-                throw new Error("El precio debe ser un numero y mayor a 0");
-            }
-
-            if(isNaN(stock) || stock <= 0){
-                throw new Error("El Stock debe ser un numero y mayor a 0")
-            }
-
             await this.validateCode(code);
-
-            if (!Array.isArray(thumbnails)) {
-                throw new Error( "Thumbnails debe ser un array");
-            }
 
             let newId = uuidv4()
 
             let newProduct = {
-                id : newId,
+                id : newId,             
                 title,
                 description,
                 code,
@@ -110,9 +80,7 @@ class ProductManager {
         try{
             await this.readProducts();
             const products = this.products
-            if(products.length === 0){
-                throw new Error("No existen productos");
-            }
+
             return products;
         }catch(error){
             console.error("Error al obtener la lista de productos", error.message)
@@ -131,14 +99,7 @@ class ProductManager {
 
             const product = this.products;
 
-            if(!validateUUID(id)){
-                throw new Error(`El ID ${id} no es valido`)
-            }
-
             const productIndex = product.findIndex(p => p.id === id);
-            if(productIndex === -1){
-                throw new Error(`No existe ningun producto con ID ${id}`);
-            }
 
             const [productRemoved] = product.splice(productIndex, 1);
 
@@ -157,10 +118,6 @@ class ProductManager {
             await this.readProducts();
 
             const modProduct = await this.findProductById(id)
-
-            if(!updateData || Object.keys(updateData).length === 0 || typeof updateData !== "object") {
-                throw new Error("Los datos de actualización deben ser un objeto no vacio");
-            }
 
             if(updateData.code){
                 await this.validateCode(updateData.code, id)

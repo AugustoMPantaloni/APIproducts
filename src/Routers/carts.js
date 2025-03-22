@@ -1,9 +1,9 @@
 const express = require ("express");
 const routerCarts = express.Router();
 
-const cartManager = require("../Models/cartsManager");
+const cartManager = require("../dao/cartsManager");
 const instanciaCarts = new cartManager();
-const productManager = require ("../Models/productManager");
+const productManager = require ("../dao/productManager");
 const instanciaProducts = new productManager();
 
 //lista los productos que pertenecen al carrito seleccionado

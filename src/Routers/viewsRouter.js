@@ -2,7 +2,7 @@ const express = require ("express");
 const routerRealTimeProducts = express.Router();
 const upload = require ("../config/multer")
 
-const ProductManager = require ("../Models/productManager");
+const ProductManager = require ("../dao/productManager");
 const instanciaProducts = new ProductManager();
 
 module.exports = (io) => {

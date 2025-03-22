@@ -1,18 +1,24 @@
-<h1>Lista de productos</h1>
-<ul class="product-list">
-    {{#each products}}
-        <li class="product-item">
-            <h3>{{this.title}}</h3>
-            <p><strong>Categoría:</strong> {{this.category}}</p>
-            <p><strong>Descripción:</strong> {{this.description}}</p>
-            <p><strong>Precio:</strong> ${{this.price}}</p>
-            <p><strong>Stock:</strong> {{this.stock}}</p>
-            <p><strong>Fotos:</strong></p>
-            <ul class="thumbnail-list">
-                {{#each this.thumbnails}}
-                    <li><img src="/images/{{this}}" alt="thumbnail" class="thumbnail-img"></li>
-                {{/each}}
-            </ul>
-        </li>
-    {{/each}}
-</ul>
+<h1 class="title-main">API para Ecommerce</h1>
+<h2 class="title-sub">Lista de productos</h2>
+{{#if products.length}}
+    <ul class="product-list">
+        {{#each products}}
+            <li class="product-item">
+                <h3>{{this.title}}</h3>
+                <p><strong>Categoría:</strong> {{this.category}}</p>
+                <p><strong>Descripción:</strong> {{this.description}}</p>
+                <p><strong>Precio:</strong> ${{this.price}}</p>
+                <p><strong>Stock:</strong> {{this.stock}}</p>
+                <p><strong>Fotos:</strong></p>
+                <ul class="thumbnail-list">
+                    {{#each this.thumbnails}}
+                        <li><img src="/images/{{this}}" alt="thumbnail" class="thumbnail-img"></li>
+                    {{/each}}
+                </ul>
+                <button data-id="{{this.id}}" class="button-delete">Eliminar</button>
+            </li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <h3 class="no-products">No existen productos</h3>
+{{/if}}
