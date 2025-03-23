@@ -1,14 +1,13 @@
-//Dependecias
 const express = require ("express");
 const routerProducts = express.Router();
-//Validacion ID
 const { v4: uuidv4, validate: validateUUID } = require("uuid");
-//Clase
+
 const ProductManager = require ("../dao/productManager");
+const { array } = require("../config/multer");
 const instanciaProducts = new ProductManager();
 
 //Ruta GET para obtener todos los productos
-routerProducts.get("/", async (req, res, next)=>{
+routerProducts.get("/", async (req, res)=>{
     try{
         const products =  await instanciaProducts.getAllProducts();
 
@@ -26,12 +25,18 @@ routerProducts.get("/", async (req, res, next)=>{
             mensaje:"Productos obtenidos exitosamente",
             data: products});  
     }catch(error){
-        next(error)
+        console.error("Error en la ruta GET / ", error.message)
+
+        if(error.message === "Formato invalido de productos" ){
+            return res.status(500).json({error: error.message})
+        }
+
+        res.status(500).json({error: "Error interno del servidor"});
     }
 })
 
 //Ruta GET para obtener el producto por su ID
-routerProducts.get("/:pid", async (req, res, next)=>{
+routerProducts.get("/:pid", async (req, res)=>{
     try{
         const pId = req.params.pid;
         if(!validateUUID(pId)){
@@ -45,12 +50,19 @@ routerProducts.get("/:pid", async (req, res, next)=>{
         
         res.status(200).json({mensaje:"Producto obtenido exitosamente", data: productId});
     }catch(error){
-        next(error)
+        console.error("Error en la ruta GET /:pid:", error.message);
+
+        if (error.message === "El ID proporcionado no es valido" ||
+            error.message === `No existe ningun producto con ID proporcionado`) {
+            return res.status(400).json({ Mensaje: error.message });
+        }
+
+        res.status(500).json({ Mensaje: "Error interno del servidor" });
     }
 })
 
 //Ruta POST para agregar un producto
-routerProducts.post("/", async (req, res, next)=>{
+routerProducts.post("/", async (req, res)=>{
     try{
         const { title, description, code, price, stock, status, category, thumbnails} = req.body;
         
@@ -63,6 +75,7 @@ routerProducts.post("/", async (req, res, next)=>{
         if(isNaN(price) || price <= 0){
             throw new Error("El precio debe ser un numero y mayor a 0");
         }
+
         if(isNaN(stock) || stock <= 0){
             throw new Error("El Stock debe ser un numero y mayor a 0")
         }
@@ -75,12 +88,26 @@ routerProducts.post("/", async (req, res, next)=>{
 
         res.status(201).json({Mensaje: "Nuevo producto creado", newProduct})
     }catch(error){
-        next(error)
+        console.error("Error en la ruta POST /:", error.message)
+
+        if(error.message === "El status es obligatorio" || 
+            error.message === "La categoría es obligatoria" || 
+            error.message === "El stock es obligatorio" || 
+            error.message === "El precio es obligatorio" || 
+            error.message === "El código es obligatorio" || 
+            error.message === "La descripción es obligatoria" ||
+            error.message === "El título es obligatorio" ||
+            error.message === "Thumbnails debe ser un array" )
+            {
+            return res.status(400).json({error: error.message})
+        }
+
+        res.status(500).json({mensaje:"Error interno del servidor"})
     }
 })
 
 //Ruta PUT para modificar un producto
-routerProducts.put("/:pid", async (req,res, next)=>{
+routerProducts.put("/:pid", async (req,res)=>{
     try{
         const pId = req.params.pid;
         if(!validateUUID(pId)){
@@ -96,12 +123,20 @@ routerProducts.put("/:pid", async (req,res, next)=>{
 
         res.status(200).json({Mensaje: "Producto Modificado" ,modProduct})
     }catch(error){
-        next(error)   
+        console.error("Error en la ruta PUT/:", error.message)
+
+        if(error.message === "El ID proporcionado no es valido" ||
+            error.message === "Los datos de actualización deben ser un objeto no vacio"){
+            return res.status(400).json({error: error.message})
+            }
+
+        res.status(500).json({Mensaje: "Error interno del servidor"})
+        
     }
 })
 
 //Ruta DELETE para eliminar un producto
-routerProducts.delete("/:pid", async (req,res, next)=>{
+routerProducts.delete("/:pid", async (req,res)=>{
     try{
         const pId = req.params.pid;
         if(!validateUUID(pId)){
@@ -115,10 +150,16 @@ routerProducts.delete("/:pid", async (req,res, next)=>{
 
         res.status(200).json({Mensaje: "Producto Eliminado", deleteProduct})
     }catch(error){
-        next(error)
+        console.error("Error en la ruta DELETE/:", error.message)
+
+        if(error.message === "El ID proporcionado no es valido" ||
+            error.message === `No existe ningun producto con ID ${pId}`)
+            {
+            return res.status(400).json({error: error.message})
+        }
+
+        res.status(500).json({Mensaje: "Error interno del servidor"})
     }
 })
 
 module.exports = routerProducts;
-
-

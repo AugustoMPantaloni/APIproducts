@@ -15,9 +15,6 @@ class CartManager {
             const data = await fs.readFile(this.filePath, "utf-8");
             this.carts = JSON.parse(data);
 
-            if (this.carts.length === 0) {
-                throw new Error("El archivo de carritos esta vacio")
-            }
             return{succes: "Archivo de carts cargado correctamente"}
         } catch (error) {
             console.error("Error al cargar el carrito desde el archivo:", error.message);
@@ -65,18 +62,8 @@ class CartManager {
         try{
             await this.readCarts();
 
-            if(!validateUUID(cartId)){
-                throw new Error(`El ID ${cartId} de Cart no es valido`);
-            }
-            if(!validateUUID(productId)){
-                throw new Error(`El ID ${productId} de Product no es valido`);
-            }
-    
             const cart = this.carts.find(cart => cart.id === cartId);
-            if(!cart){
-                throw new Error(`Carrito con ID ${cartId} no existe`);
-            }
-    
+
             const product = cart.products.find(p => p.product === productId)
             if(product){
                 product.quantity += 1;
@@ -88,7 +75,7 @@ class CartManager {
                     })
                 console.log(`Producto con ID ${productId} agregado con exito al carrito`)        
             }
-    
+
             await this.saveCarts()
             return{success: "Producto agregado al carrito correctamente"}
         }catch(error){
@@ -102,14 +89,7 @@ class CartManager {
         try{
             await this.readCarts();
 
-            if(!validateUUID(id)){
-                throw new Error(`El ID ${id} de Cart no es valido`);
-            }
-    
             let cartById = this.carts.find (c => c.id === id)
-            if(!cartById){
-                throw new Error(`El Cart con ID ${id} no existe`);
-            }
     
             return {success:"Carrito encontrado", cart: cartById}
         }catch(error){

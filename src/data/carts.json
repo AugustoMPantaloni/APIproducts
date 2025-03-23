@@ -7,5 +7,14 @@
         "quantity": 1
       }
     ]
+  },
+  {
+    "id": "46bcaafc-e262-4427-8715-3814300840d2",
+    "products": [
+      {
+        "product": "477b0b59-b50c-4b1f-9f58-2490779a6d0d",
+        "quantity": 1
+      }
+    ]
   }
 ]

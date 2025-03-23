@@ -1,49 +1,68 @@
 const express = require ("express");
 const routerRealTimeProducts = express.Router();
 const upload = require ("../config/multer")
-
+const { v4: uuidv4, validate: validateUUID } = require("uuid");
 const ProductManager = require ("../dao/productManager");
 const instanciaProducts = new ProductManager();
 
 module.exports = (io) => {
     //Ruta GET para obtener todos los productos
-    routerRealTimeProducts.get("/", async (req, res)=>{
+    routerRealTimeProducts.get("/", async (req, res, next)=>{
         try{
             const products =  await instanciaProducts.getAllProducts();
+
+            if(!Array.isArray(products)){
+                throw new Error("Formato invalido de productos")
+            }
+
+            if(products.length === 0 ){
+                return res.status(200).json({
+                        mensaje:"No hay productos disponibles", 
+                        data: products})
+            }
+
             res.render("realTimeProducts", { products }); //
             io.emit("getAllProducts", products); 
         }catch(error){
-            res.status(500).json({Mensaje: "Error interno del servidor."})
+            next(error);
         }
     })
 
     //Ruta GET para obtener el producto por su ID
-    routerRealTimeProducts.get("/:pid", async (req, res)=>{
+    routerRealTimeProducts.get("/:pid", async (req, res, next)=>{
         try{
             const pId = req.params.pid;
+            if(!validateUUID(pId)){
+                throw new Error("El ID proporcionado no es valido");
+            }
 
             const productId = await instanciaProducts.findProductById(pId);
-            
+            if(!productId){
+                throw new Error(`No existe ningun producto con ID proporcionado`);
+            }
             res.status(200).json({data: productId});
         }catch(error){
-
-            if (error.message.includes("El ID proporcionado no es válido")) {
-                return res.status(400).json({ Mensaje: error.message });
-            }
-            if (error.message.includes("No existe ningún producto con ID")) {
-                return res.status(404).json({ Mensaje: error.message });
-            }
-
-            console.error("Error en la ruta GET /:pid:", error.message);
-            res.status(500).json({ Mensaje: "Error interno del servidor" });
+            next(error);
         }
     })
 
     //Ruta POST para agregar un producto
-    routerRealTimeProducts.post("/", upload.array("thumbnails"), async (req, res)=>{
+    routerRealTimeProducts.post("/", upload.array("thumbnails"), async (req, res, next)=>{
         try{
             const { title, description, code, price, stock, status,category} = req.body;
             const thumbnails = req.files?.map(file => file.path) || [];
+
+            if (!title || typeof title !== "string") throw new Error("El título es obligatorio y debe ser un texto");
+            if (!description || typeof description !== "string") throw new Error("La descripción es obligatoria y debe ser un texto");
+            if (!code || typeof code !== "string") throw new Error("El código es obligatorio y debe ser un texto");
+            if (!category || typeof category !== "string") throw new Error("La categoría es obligatoria y debe ser un texto");
+
+            if(isNaN(price) || price <= 0){
+                throw new Error("El precio debe ser un numero y mayor a 0");
+            }
+            if(isNaN(stock) || stock <= 0){
+                throw new Error("El Stock debe ser un numero y mayor a 0")
+            }
 
             const newProduct = await instanciaProducts.createProduct(title, description, code, price, stock, status,category, thumbnails)
             if(newProduct.error){
@@ -53,8 +72,7 @@ module.exports = (io) => {
             io.emit("getAllProducts", products); 
             res.render("realTimeProducts", { products }); 
         }catch(error){
-            console.error("Error en la ruta POST /:", error.message)
-            res.status(500).json({mensaje:"Error interno del servidor"})
+            next(error)
         }
     })
 
@@ -62,39 +80,42 @@ module.exports = (io) => {
     routerRealTimeProducts.put("/:pid", async (req,res)=>{
         try{
             const pId = req.params.pid;
+            if(!validateUUID(pId)){
+                throw new Error("El ID proporcionado no es valido");
+            }
 
             const updateData = req.body
+            if(!updateData || Object.keys(updateData).length === 0 || typeof updateData !== "object") {
+                throw new Error("Los datos de actualización deben ser un objeto no vacio");
+            }
 
             const modProduct = await instanciaProducts.modProduct(pId, updateData)
 
-            if(modProduct.error){
-                return res.status(400).json({error: modProduct.error})
-            }
             res.status(200).json({Mensaje: "Producto Modificado" ,modProduct})
         }catch(error){
-            console.error("Error en la ruta PUT/:", error.message)
-            res.status(500).json({Mensaje: "Error interno del servidor"})
+            next(erro);
             
         }
     })
 
     //Ruta DELETE para eliminar un producto
-    routerRealTimeProducts.delete("/:pid", async (req,res)=>{
+    routerRealTimeProducts.delete("/:pid", async (req,res, next)=>{
         try{
             const pId = req.params.pid;
+            if(!validateUUID(pId)){
+                throw new Error("El ID proporcionado no es valido");
+            }
 
             const deleteProduct = await instanciaProducts.deleteProduct(pId);
-
-            if(deleteProduct.error){
-                return res.status(404).json({error: deleteProduct.error})
+            if(!pId){
+                throw new Error(`No existe ningun producto con ID ${pId}`)
             }
 
             const products =  await instanciaProducts.getAllProducts();
             io.emit("getAllProducts", products);
             res.render("realTimeProducts", { products });
         }catch(error){
-            console.error("Error en la ruta DELETE/:", error.message)
-            res.status(500).json({Mensaje: "Error interno del servidor"})
+            next(error);
         }
     })
 

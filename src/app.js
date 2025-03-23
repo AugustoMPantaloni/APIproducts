@@ -1,19 +1,27 @@
+//Dependencias
 const express = require ("express");
 const app = express();
 const path = require("path");
+const http = require ("http");
+const {Server} = require ("socket.io");
+const exphbs = require ("express-handlebars");
+//Router y controladores
 const routerProducts = require ("./Routers/products");
 const routerCarts = require ("./Routers/carts");
 const routerRealTimeProducts = require ("./Routers/viewsRouter"); //Router para los productos en tiempo real
-const exphbs = require ("express-handlebars");
 const controllerProducts = require ("./controllers/productsController")//Se creo un controlador para mostrar los productos en la ruta home
-const http = require ("http");
-const {Server} = require ("socket.io");
 
 //configuracion socket.io
 const server = http.createServer(app);
 const io = new Server(server);
 
+//MongoDB
+const ConnectDB = require ("./db")
+ConnectDB();
+
 //Middleware 
+const errorHandler = require ("./middleware/errorHandler");
+const { error } = require("console");
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname, "..", "public"))); 
@@ -28,6 +36,7 @@ app.get("/", controllerProducts.getProducts);
 app.use("/api/products", routerProducts);
 app.use("/api/carts", routerCarts);
 app.use("/realtimeproducts", routerRealTimeProducts(io)); //Ruta para los productos en tiempo real
+app.use(errorHandler);
 
 //Servidor
 const PORT = 8080;

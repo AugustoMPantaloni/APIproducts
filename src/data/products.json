@@ -1,16 +1,1 @@
-[
-  {
-    "id": "6e064dc3-ea0b-4b6d-9e00-d015534ec87b",
-    "title": "Prueba",
-    "description": "Prueba2",
-    "code": "LAP-RTX4060",
-    "price": 2500,
-    "stock": 15,
-    "category": "Laptops",
-    "thumbnails": [
-      "https://example.com/images/laptop1.jpg",
-      "https://example.com/images/laptop2.jpg"
-    ],
-    "status": true
-  }
-]
+[]
