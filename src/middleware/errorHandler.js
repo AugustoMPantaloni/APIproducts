@@ -9,6 +9,7 @@ const errorHandler = (err, req, res, next) => {
         err.message === "El status es obligatorio y debe ser un booleano" || 
         err.message === "El precio debe ser un numero y mayor a 0" || 
         err.message === "El Stock debe ser un numero y mayor a 0" || 
+        err.message === "El Codigo proporcionado ya existe" ||
         err.message === "Thumbnails debe ser un array") {
         console.error("Error 400: Invalid request data -", err.message);
         return res.status(400).json({ error: err.message });

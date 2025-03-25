@@ -2,7 +2,7 @@ const express = require ("express");
 const routerRealTimeProducts = express.Router();
 const upload = require ("../config/multer")
 const { v4: uuidv4, validate: validateUUID } = require("uuid");
-const ProductManager = require ("../dao/productManager");
+const ProductManager = require ("../Respaldos/productManagerRespaldo");
 const instanciaProducts = new ProductManager();
 
 module.exports = (io) => {
@@ -16,13 +16,12 @@ module.exports = (io) => {
             }
 
             if(products.length === 0 ){
-                return res.status(200).json({
-                        mensaje:"No hay productos disponibles", 
-                        data: products})
+                io.emit("getAllProducts", products);
+                return res.render("realTimeProducts", {products}); 
             }
 
-            res.render("realTimeProducts", { products }); //
             io.emit("getAllProducts", products); 
+            res.render("realTimeProducts", {products}); 
         }catch(error){
             next(error);
         }

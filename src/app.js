@@ -9,7 +9,7 @@ const exphbs = require ("express-handlebars");
 const routerProducts = require ("./Routers/products");
 const routerCarts = require ("./Routers/carts");
 const routerRealTimeProducts = require ("./Routers/viewsRouter"); //Router para los productos en tiempo real
-const controllerProducts = require ("./controllers/productsController")//Se creo un controlador para mostrar los productos en la ruta home
+const controllerProducts = require ("./Routers/viewsHome")//Se creo un controlador para mostrar los productos en la ruta home
 
 //configuracion socket.io
 const server = http.createServer(app);

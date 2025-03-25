@@ -5,8 +5,7 @@ const { v4: uuidv4, validate: validateUUID } = require("uuid");
 //clases
 const cartManager = require("../dao/cartsManager");
 const instanciaCarts = new cartManager();
-const productManager = require ("../dao/productManager");
-const instanciaProducts = new productManager();
+
 
 //lista los productos que pertenecen al carrito seleccionado
 routerCarts.get ("/:cid", async (req, res, next) =>{

@@ -1,13 +1,16 @@
 //Dependecias
 const express = require ("express");
 const routerProducts = express.Router();
-//ProductManager
-const {createProduct, getAllProducts, getProductById, deleteProduct, modProduct, existingCode, validateId} = require ("../dao/productManager")
+//Validacion ID
+const { v4: uuidv4, validate: validateUUID } = require("uuid");
+//Clase
+const ProductManager = require ("../dao/productManager");
+const instanciaProducts = new ProductManager();
 
 //Ruta GET para obtener todos los productos
 routerProducts.get("/", async (req, res, next)=>{
     try{
-        const products =  await getAllProducts();
+        const products =  await instanciaProducts.getAllProducts();
 
         if(!Array.isArray(products)){
             throw new Error("Formato invalido de productos")
@@ -31,11 +34,11 @@ routerProducts.get("/", async (req, res, next)=>{
 routerProducts.get("/:pid", async (req, res, next)=>{
     try{
         const pId = req.params.pid;
-        if (!(await validateId(pId))) {  
+        if(!validateUUID(pId)){
             throw new Error("El ID proporcionado no es valido");
         }
 
-        const productId = await getProductById(pId);
+        const productId = await instanciaProducts.findProductById(pId);
         if(!productId){
             throw new Error(`No existe ningun producto con ID proporcionado`);
         }
@@ -63,16 +66,12 @@ routerProducts.post("/", async (req, res, next)=>{
         if(isNaN(stock) || stock <= 0){
             throw new Error("El Stock debe ser un numero y mayor a 0")
         }
-        const codeExist = await existingCode(code)
-        if(codeExist){
-            throw new Error("El Codigo proporcionado ya existe")
-        }
 
         if (!Array.isArray(thumbnails)) {
             throw new Error( "Thumbnails debe ser un array");
         }
 
-        const newProduct = await createProduct(title, description, code, price, stock, status, category, thumbnails);
+        const newProduct = await instanciaProducts.createProduct(title, description, code, price, stock, status, category, thumbnails);
 
         res.status(201).json({Mensaje: "Nuevo producto creado", newProduct})
     }catch(error){
@@ -84,7 +83,7 @@ routerProducts.post("/", async (req, res, next)=>{
 routerProducts.put("/:pid", async (req,res, next)=>{
     try{
         const pId = req.params.pid;
-        if (!(await validateId(pId))) {  
+        if(!validateUUID(pId)){
             throw new Error("El ID proporcionado no es valido");
         }
 
@@ -93,9 +92,9 @@ routerProducts.put("/:pid", async (req,res, next)=>{
             throw new Error("Los datos de actualización deben ser un objeto no vacio");
         }
 
-        const productMod = await modProduct(pId, updateData)
+        const modProduct = await instanciaProducts.modProduct(pId, updateData)
 
-        res.status(200).json({Mensaje: "Producto Modificado", productMod})
+        res.status(200).json({Mensaje: "Producto Modificado" ,modProduct})
     }catch(error){
         next(error)   
     }
@@ -105,16 +104,16 @@ routerProducts.put("/:pid", async (req,res, next)=>{
 routerProducts.delete("/:pid", async (req,res, next)=>{
     try{
         const pId = req.params.pid;
-        if (!(await validateId(pId))) {  
+        if(!validateUUID(pId)){
             throw new Error("El ID proporcionado no es valido");
         }
 
-        const productDelete = await deleteProduct(pId);
-        if(!productDelete){
-            throw new Error("No existe ningun producto con ID proporcionado")
+        const deleteProduct = await instanciaProducts.deleteProduct(pId);
+        if(!pId){
+            throw new Error(`No existe ningun producto con ID ${pId}`)
         }
 
-        res.status(200).json({Mensaje: "Producto Eliminado", productDelete})
+        res.status(200).json({Mensaje: "Producto Eliminado", deleteProduct})
     }catch(error){
         next(error)
     }
