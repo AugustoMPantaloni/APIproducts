@@ -25,83 +25,90 @@
         <option value="false">No disponible</option>
     </select>
 
-    <label for="thumbnails" class="form-label">Imágenes (URLs separadas por comas):</label>
-    <input type="file" id="thumbnails" name="thumbnails" class="form-input" placeholder="Ej: https://imagen1.jpg, https://imagen2.png">
+    <label for="thumbnails" class="form-label">Imágenes:</label>
+    <input type="file" id="thumbnails" name="thumbnails" class="form-input" multiple>
 
     <button type="submit" class="form-button">Crear Producto</button>
 </form>
 
 <h2 class="title-sub">Lista de productos</h2>
-{{#if products.length}}
-    <ul class="product-list">
-        {{#each products}}
-            <li class="product-item">
-                <h3>{{this.title}}</h3>
-                <p><strong>Categoría:</strong> {{this.category}}</p>
-                <p><strong>Descripción:</strong> {{this.description}}</p>
-                <p><strong>Precio:</strong> ${{this.price}}</p>
-                <p><strong>Stock:</strong> {{this.stock}}</p>
-                <p><strong>Fotos:</strong></p>
-                <ul class="thumbnail-list">
-                    {{#each this.thumbnails}}
-                        <li><img src="/images/{{this}}" alt="thumbnail" class="thumbnail-img"></li>
-                    {{/each}}
-                </ul>
-                <button data-id="{{this.id}}" class="button-delete">Eliminar</button>
-            </li>
-        {{/each}}
-    </ul>
+<div id="products-container">
+    {{#if products.length}}
+        <ul class="product-list">
+            {{#each products}}
+                <li class="product-item">
+                    <h3>{{this.title}}</h3>
+                    <p><strong>Categoría:</strong> {{this.category}}</p>
+                    <p><strong>Descripción:</strong> {{this.description}}</p>
+                    <p><strong>Precio:</strong> ${{this.price}}</p>
+                    <p><strong>Stock:</strong> {{this.stock}}</p>
+                    <p><strong>Estado:</strong> {{#if this.status}}Disponible{{else}}No disponible{{/if}}</p>
+                    <p><strong>Fotos:</strong></p>
+                    <ul class="thumbnail-list">
+                        {{#each this.thumbnails}}
+                            <li><img src="/images/{{this}}" alt="thumbnail" class="thumbnail-img"></li>
+                        {{/each}}
+                    </ul>
+                    <button data-id="{{this._id}}" class="button-delete">Eliminar</button>
+                </li>
+            {{/each}}
+        </ul>
     {{else}}
-    <h3 class="no-products">No existen productos</h3>
-{{/if}}
+        <h3 class="no-products">No existen productos</h3>
+    {{/if}}
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
+    const productsContainer = document.getElementById('products-container');
 
     socket.on('connect', () => {
         console.log('Conectado al servidor de Socket.IO');
     });
 
     socket.on('getAllProducts', (products) => {
-        const productList = document.querySelector('.product-list');
-        productList.innerHTML = ''; 
-
-        products.forEach(product => {
-            const productItem = document.createElement('li');
-            productItem.classList.add('product-item');
-            productItem.innerHTML = `
-                <h3>${product.title}</h3>
-                <p><strong>Categoría:</strong> ${product.category}</p>
-                <p><strong>Descripción:</strong> ${product.description}</p>
-                <p><strong>Precio:</strong> $${product.price}</p>
-                <p><strong>Stock:</strong> ${product.stock}</p>
-                <p><strong>Fotos:</strong></p>
-                <ul class="thumbnail-list">
-                    ${product.thumbnails.map(thumbnail => 
-                        `<li><img src="/images/${thumbnail}" alt="thumbnail" class="thumbnail-img"></li>`
-                    ).join('')}
+        if (products.length > 0) {
+            productsContainer.innerHTML = `
+                <ul class="product-list">
+                    ${products.map(product => `
+                        <li class="product-item">
+                            <h3>${product.title}</h3>
+                            <p><strong>Categoría:</strong> ${product.category}</p>
+                            <p><strong>Descripción:</strong> ${product.description}</p>
+                            <p><strong>Precio:</strong> $${product.price}</p>
+                            <p><strong>Stock:</strong> ${product.stock}</p>
+                            <p><strong>Estado:</strong> ${product.status ? 'Disponible' : 'No disponible'}</p>
+                            <p><strong>Fotos:</strong></p>
+                            <ul class="thumbnail-list">
+                                ${product.thumbnails.map(thumbnail => 
+                                    `<li><img src="/images/${thumbnail}" alt="thumbnail" class="thumbnail-img"></li>`
+                                ).join('')}
+                            </ul>
+                            <button data-id="${product._id}" class="button-delete">Eliminar</button>
+                        </li>
+                    `).join('')}
                 </ul>
-                <button data-id="${product.id}" class="button-delete">Eliminar</button>
             `;
-            productList.appendChild(productItem);
-        });
+        } else {
+            productsContainer.innerHTML = '<h3 class="no-products">No existen productos</h3>';
+        }
     });
 
-    document.querySelector('.product-list').addEventListener('click', async (event) => {
+    document.addEventListener('click', async (event) => {
         if (event.target.classList.contains('button-delete')) {
             const productId = event.target.dataset.id;
             try {
                 const response = await fetch(`/realtimeproducts/${productId}`, {
                     method: 'DELETE',
                 });
-                if (!response.ok){
-                throw new Error('Error al eliminar')};
+                if (!response.ok) throw new Error('Error al eliminar');
                 
                 console.log('Producto eliminado');
-                socket.emit('requestUpdate'); 
+                socket.emit('requestUpdate');
             } catch (error) {
                 console.error('Error:', error.message);
+                alert('Error al eliminar el producto');
             }
         }
     });

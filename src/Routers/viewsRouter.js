@@ -1,15 +1,16 @@
+//Dependencias
 const express = require ("express");
 const routerRealTimeProducts = express.Router();
+//Multer
 const upload = require ("../config/multer")
-const { v4: uuidv4, validate: validateUUID } = require("uuid");
-const ProductManager = require ("../Respaldos/productManagerRespaldo");
-const instanciaProducts = new ProductManager();
+//ProductManager
+const {createProduct, getAllProducts, getProductById, deleteProduct, modProduct, existingCode, validateId} = require ("../dao/productManagerMongo")
 
 module.exports = (io) => {
     //Ruta GET para obtener todos los productos
     routerRealTimeProducts.get("/", async (req, res, next)=>{
         try{
-            const products =  await instanciaProducts.getAllProducts();
+            const products =  await getAllProducts();
 
             if(!Array.isArray(products)){
                 throw new Error("Formato invalido de productos")
@@ -31,11 +32,11 @@ module.exports = (io) => {
     routerRealTimeProducts.get("/:pid", async (req, res, next)=>{
         try{
             const pId = req.params.pid;
-            if(!validateUUID(pId)){
+            if (!(await validateId(pId))) {  
                 throw new Error("El ID proporcionado no es valido");
             }
 
-            const productId = await instanciaProducts.findProductById(pId);
+            const productId = await getProductById(pId);
             if(!productId){
                 throw new Error(`No existe ningun producto con ID proporcionado`);
             }
@@ -62,14 +63,16 @@ module.exports = (io) => {
             if(isNaN(stock) || stock <= 0){
                 throw new Error("El Stock debe ser un numero y mayor a 0")
             }
-
-            const newProduct = await instanciaProducts.createProduct(title, description, code, price, stock, status,category, thumbnails)
-            if(newProduct.error){
-                return res.status(400).json({Error: newProduct.error})
+            const codeExist = await existingCode(code)
+            if(codeExist){
+                throw new Error("El Codigo proporcionado ya existe")
             }
-            const products = await instanciaProducts.getAllProducts();
+
+            await createProduct(title, description, code, price, stock, status,category, thumbnails)
+
+            const products = await getAllProducts();
             io.emit("getAllProducts", products); 
-            res.render("realTimeProducts", { products }); 
+            res.redirect("realTimeProducts"); 
         }catch(error){
             next(error)
         }
@@ -79,18 +82,18 @@ module.exports = (io) => {
     routerRealTimeProducts.put("/:pid", async (req,res)=>{
         try{
             const pId = req.params.pid;
-            if(!validateUUID(pId)){
-                throw new Error("El ID proporcionado no es valido");
-            }
+            if (!(await validateId(pId))) {  
+            throw new Error("El ID proporcionado no es valido");
+        }
 
             const updateData = req.body
             if(!updateData || Object.keys(updateData).length === 0 || typeof updateData !== "object") {
                 throw new Error("Los datos de actualización deben ser un objeto no vacio");
             }
 
-            const modProduct = await instanciaProducts.modProduct(pId, updateData)
+            const productMod = await modProduct(pId, updateData)
 
-            res.status(200).json({Mensaje: "Producto Modificado" ,modProduct})
+            res.status(200).json({Mensaje: "Producto Modificado" , productMod})
         }catch(error){
             next(erro);
             
@@ -101,16 +104,16 @@ module.exports = (io) => {
     routerRealTimeProducts.delete("/:pid", async (req,res, next)=>{
         try{
             const pId = req.params.pid;
-            if(!validateUUID(pId)){
+            if (!(await validateId(pId))) {  
                 throw new Error("El ID proporcionado no es valido");
             }
 
-            const deleteProduct = await instanciaProducts.deleteProduct(pId);
-            if(!pId){
-                throw new Error(`No existe ningun producto con ID ${pId}`)
+            const productDelete = await deleteProduct(pId);
+            if(!productDelete){
+                throw new Error("No existe ningun producto con ID proporcionado")
             }
 
-            const products =  await instanciaProducts.getAllProducts();
+            const products =  await getAllProducts();
             io.emit("getAllProducts", products);
             res.render("realTimeProducts", { products });
         }catch(error){

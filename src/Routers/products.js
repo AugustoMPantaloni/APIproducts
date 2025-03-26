@@ -2,7 +2,7 @@
 const express = require ("express");
 const routerProducts = express.Router();
 //ProductManager
-const {createProduct, getAllProducts, getProductById, deleteProduct, modProduct, existingCode, validateId} = require ("../dao/productManager")
+const {createProduct, getAllProducts, getProductById, deleteProduct, modProduct, existingCode, validateId} = require ("../dao/productManagerMongo")
 
 //Ruta GET para obtener todos los productos
 routerProducts.get("/", async (req, res, next)=>{

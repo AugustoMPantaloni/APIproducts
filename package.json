@@ -9,7 +9,7 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Esta es una API RESTful para la gestión de productos, que permite realizar operaciones básicas como obtener, agregar, actualizar y eliminar productos. La API utiliza Node.js con el framework Express y gestiona los datos mediante un archivo JSON. Es ideal para practicar y entender los conceptos de la creación de APIs sin necesidad de una base de datos.",
   "dependencies": {
     "express": "^4.21.2",
     "express-handlebars": "^8.0.1",
