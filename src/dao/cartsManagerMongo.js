@@ -78,7 +78,7 @@ const mongoose = require ("mongoose");
 
     //Elimina todos los productos del carro de compras
     async function emptyCart(cartId){
-        
+        const cartById = await CartModel.findByIdAndDelete
     }
 
     module.exports = {
