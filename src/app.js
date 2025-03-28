@@ -9,7 +9,7 @@ const exphbs = require ("express-handlebars");
 const routerProducts = require ("./Routers/products");
 const routerCarts = require ("./Routers/carts");
 const routerRealTimeProducts = require ("./Routers/viewsRouter"); //Router para los productos en tiempo real
-const controllerProducts = require ("./Routers/viewsHome")//Se creo un controlador para mostrar los productos en la ruta home
+const routerHome = require ("./Routers/viewsHome")//Router para la ruta raiz
 
 //configuracion socket.io
 const server = http.createServer(app);
@@ -20,7 +20,7 @@ const ConnectDB = require ("./db")
 ConnectDB();
 
 //Middleware 
-const errorHandler = require ("./middleware/errorHandler");
+const errorHandler = require ("./middleware/errorHandler"); //REVISAR ERRORES, HAY MUCHOS REPETIDOS Y ESTAN MAL ORGANIZADOS.
 const { error } = require("console");
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -32,7 +32,7 @@ app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
 
 //Rutas
-app.get("/", controllerProducts.getProducts); 
+app.get("/", routerHome.getProducts); 
 app.use("/api/products", routerProducts);
 app.use("/api/carts", routerCarts);
 app.use("/realtimeproducts", routerRealTimeProducts(io)); //Ruta para los productos en tiempo real

@@ -19,7 +19,7 @@ const mongoose = require ("mongoose");
         }
     }
 
-    //Agrega producto al carro de compras con ID seleccionado
+    //Agrega producto al carro de compras 
     async function addProductToCart(cartId, productId){
         try{
             const result = await CartModel.findOneAndUpdate(
@@ -47,7 +47,7 @@ const mongoose = require ("mongoose");
         }
     }
 
-    //lista los productos que pertenecen al carro de compras seleccionado
+    //lista los productos que pertenecen al carro de compras 
     async function getCartById (id){
         try{
             const cartById =  await CartModel.findById(id).populate("cart.product")
@@ -78,7 +78,49 @@ const mongoose = require ("mongoose");
 
     //Elimina todos los productos del carro de compras
     async function emptyCart(cartId){
-        const cartById = await CartModel.findByIdAndDelete
+        try{
+            const cartById = await CartModel.findByIdAndUpdate(
+                cartId,
+                {$set: {cart:[] } },
+                {new: true}
+            )
+            return{success: true, data: cartById}
+        }catch(error){
+            console.error("Error al borrar los productos del carro de compras", error.message)
+            return{error: error.message}
+        }
+    }
+
+    //Eliminar solo un producto del carro de compras
+    async function deleteProductCart(cartId, productId){
+        try{
+            const deleteProduct = await CartModel.findByIdAndUpdate(
+                cartId,
+                {$pull:{ cart:{ product: productId} } },
+                {new: true}
+            )
+
+            return{success: true, data: deleteProduct}
+        }catch(error){
+            console.error("Error al eliminar un producto del carro de compras")
+            return{Error: error.message}
+        }
+    }
+
+    //Actualiza el carro de compras con un array de varios productos
+    async function updateCartProducts (cartId, products){
+        try{
+            const updateCart = await CartModel.findByIdAndUpdate(
+                cartId,
+                {$push:{cart:{$each: products} } },
+                {new: true}
+            )
+            
+            return{success: true, data: updateCart}
+        }catch(error){
+            console.error("Error al agregar los productos al carro de compras", error.message)
+            return{ Error: error.message}
+        }
     }
 
     module.exports = {
@@ -86,5 +128,8 @@ const mongoose = require ("mongoose");
         addProductToCart,
         getCartById,
         updateQuantityProduct,
-        validateId
+        validateId,
+        emptyCart,
+        deleteProductCart,
+        updateCartProducts
     }

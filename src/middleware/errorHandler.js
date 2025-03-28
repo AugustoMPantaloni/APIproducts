@@ -9,8 +9,10 @@ const errorHandler = (err, req, res, next) => {
         err.message === "El status es obligatorio y debe ser un booleano" || 
         err.message === "El precio debe ser un numero y mayor a 0" || 
         err.message === "El Stock debe ser un numero y mayor a 0" || 
-        err.message === "La cantidad debe ser un numero entero y mayor a 0" || 
         err.message === "El Codigo proporcionado ya existe" ||
+        err.message === "La cantidad debe ser un numero entero y mayor a 0" || 
+        err.message === "¡Los productos deben ser un array no vacio!" ||
+        err.message === "Error en el campo del producto. Cada producto debe tener: -Un ID valido de mongoose. -Una Quantity que sea de tipo numero, entero y mayor a 0" ||
         err.message === "Thumbnails debe ser un array") {
         console.error("Error 400: Invalid request data -", err.message);
         return res.status(400).json({ error: err.message });
@@ -19,6 +21,7 @@ const errorHandler = (err, req, res, next) => {
     // Errores 404: No se encontró el recurso
     if (err.message === "El ID proporcionado no es valido" || 
         err.message === "No existe ningun producto con ID proporcionado" || 
+        err.message === "Carrito o producto no encontrado" || 
         err.message === "No existe ningun producto con ID" ||
         err.message === "Carrito con el ID proporcionado no existe" || 
         err.message === "El ID proporcionado del Carrrito no es valido" ||
