@@ -18,6 +18,7 @@ routerProducts.get("/", async (req, res, next)=>{
                 throw new Error("El parámetro 'page' debe ser un número entero positivo.");
             }
         }
+        
         if(limitNum){
             if (isNaN(limitNum) || limitNum <= 0) {
                 throw new Error("El parámetro 'limit' debe ser un número entero positivo.");

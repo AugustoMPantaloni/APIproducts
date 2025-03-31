@@ -16,18 +16,22 @@ module.exports = (io) => {
             const pageNum = parseInt(page);
             const limitNum = parseInt(limit);
 
-            if (isNaN(pageNum) || pageNum <= 0) {
-                throw new Error("El parámetro 'page' debe ser un número entero positivo.");
-            }
-            if (isNaN(limitNum) || limitNum <= 0) {
-                throw new Error("El parámetro 'limit' debe ser un número entero positivo.");
+            if(pageNum){
+                if ( isNaN(pageNum) || pageNum <= 0) {
+                    throw new Error("El parámetro 'page' debe ser un número entero positivo.");
+                }
             }
             
-            if (status !== undefined) {
+            if(limitNum){
+                if (isNaN(limitNum) || limitNum <= 0) {
+                    throw new Error("El parámetro 'limit' debe ser un número entero positivo.");
+                }
+            }
+            
+            if (status) {
                 if (status !== "true" && status !== "false") {
                     throw new Error("El parámetro 'status' solo puede ser 'true' o 'false'.");
                 }
-                status = status === "true"; 
             }
 
             if (sort && !["asc", "desc"].includes(sort.toLowerCase())) {
