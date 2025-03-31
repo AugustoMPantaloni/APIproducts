@@ -1,5 +1,6 @@
 const mongoose = require ("mongoose");
 const { array } = require ("../config/multer");
+const mongoosePaginate = require ("mongoose-paginate-v2")
 
 const ProductsSchema = new mongoose.Schema(
     {
@@ -44,7 +45,7 @@ const ProductsSchema = new mongoose.Schema(
         timestamps: true
     }
 )
-
+ProductsSchema.plugin(mongoosePaginate)
 const ProductModel = mongoose.model("Products", ProductsSchema)
 
 module.exports = ProductModel;

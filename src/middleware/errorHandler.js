@@ -10,6 +10,10 @@ const errorHandler = (err, req, res, next) => {
         err.message === "El precio debe ser un numero y mayor a 0" || 
         err.message === "El Stock debe ser un numero y mayor a 0" || 
         err.message === "El Codigo proporcionado ya existe" ||
+        err.message === "El parámetro 'page' debe ser un número entero positivo." ||
+        err.message === "El parámetro 'limit' debe ser un número entero positivo." ||
+        err.message === "El parámetro 'status' solo puede ser 'true' o 'false'." ||
+        err.message === "El parámetro 'sort' solo puede ser 'asc' o 'desc'." ||
         err.message === "La cantidad debe ser un numero entero y mayor a 0" || 
         err.message === "¡Los productos deben ser un array no vacio!" ||
         err.message === "Error en el campo del producto. Cada producto debe tener: -Un ID valido de mongoose. -Una Quantity que sea de tipo numero, entero y mayor a 0" ||
@@ -23,6 +27,7 @@ const errorHandler = (err, req, res, next) => {
         err.message === "No existe ningun producto con ID proporcionado" || 
         err.message === "Carrito o producto no encontrado" || 
         err.message === "No existe ningun producto con ID" ||
+        err.message === "No hay productos disponibles" ||
         err.message === "Carrito con el ID proporcionado no existe" || 
         err.message === "El ID proporcionado del Carrrito no es valido" ||
         err.message === "El ID proporcionado del Producto no es valido") {

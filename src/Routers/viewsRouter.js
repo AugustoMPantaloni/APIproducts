@@ -10,19 +10,49 @@ module.exports = (io) => {
     //Ruta GET para obtener todos los productos
     routerRealTimeProducts.get("/", async (req, res, next)=>{
         try{
-            const products =  await getAllProducts();
+            const {page, limit, category, status, sort} = req.query
+            const products =  await getAllProducts(page, limit, category, status, sort);
+            
+            const pageNum = parseInt(page);
+            const limitNum = parseInt(limit);
 
-            if(!Array.isArray(products)){
-                throw new Error("Formato invalido de productos")
+            if (isNaN(pageNum) || pageNum <= 0) {
+                throw new Error("El parámetro 'page' debe ser un número entero positivo.");
+            }
+            if (isNaN(limitNum) || limitNum <= 0) {
+                throw new Error("El parámetro 'limit' debe ser un número entero positivo.");
+            }
+            
+            if (status !== undefined) {
+                if (status !== "true" && status !== "false") {
+                    throw new Error("El parámetro 'status' solo puede ser 'true' o 'false'.");
+                }
+                status = status === "true"; 
             }
 
-            if(products.length === 0 ){
-                io.emit("getAllProducts", products);
-                return res.render("realTimeProducts", {products}); 
+            if (sort && !["asc", "desc"].includes(sort.toLowerCase())) {
+                throw new Error("El parámetro 'sort' solo puede ser 'asc' o 'desc'.");
             }
 
-            io.emit("getAllProducts", products); 
-            res.render("realTimeProducts", {products}); 
+            io.emit("getAllProducts", {
+                products: products.docs,
+                pagination:{
+                    totalPages: products.totalPages,
+                    currentPage: products.page,
+                    prevPage: products.prevPage,
+                    nextPage: products.nextPage
+                }
+                });
+
+            res.render("realTimeProducts", {
+                products: products.docs,
+                pagination:{
+                    totalPages: products.totalPages,
+                    currentPage: products.page,
+                    prevPage: products.prevPage,
+                    nextPage: products.nextPage
+                }
+            }); 
         }catch(error){
             next(error);
         }

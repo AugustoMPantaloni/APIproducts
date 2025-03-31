@@ -23,10 +23,25 @@ const mongoose = require("mongoose")
         }
     }
 //Obtener todos los productos
-    async function  getAllProducts(){
+    async function  getAllProducts(page=1, limit=10, category, status, sort){
         try{
-            const products = await ProductsModel.find().lean()
-            return products;
+            const options = {
+                page: Math.max(1, parseInt(page)),
+                limit: Math.min(50, parseInt(limit)),
+                sort: sort === "asc"? {price:1}: sort === "desc"? {price: -1}: undefined,
+                lean: true,
+            }
+            const query = {}
+            if(category){
+                query.category = category
+            }
+            if(status){
+                query.status = status
+            }
+
+            const result = await ProductsModel.paginate(query, options);
+
+            return result;
         }catch(error){
             console.error("Error al obtener la lista de productos", error.message)
             return { error: error.message }
