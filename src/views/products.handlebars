@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="/css/styleDetailsProductHandlebars.css"> 
+<a href="/" class="home-link">Página Principal</a>
+<h1 class="">{{pageTitle}}</h1>
+{{#if product}}
+    <ul class="product-list">   
+            <li class="product-item">
+                <h3>{{product.title}}</h3>
+                <p><strong>Categoría:</strong> {{product.category}}</p>
+                <p><strong>Descripción:</strong> {{product.description}}</p>
+                <p><strong>Precio:</strong> ${{product.price}}</p>
+                <p><strong>Stock:</strong> {{product.stock}}</p>
+                <p><strong>Fotos:</strong></p>
+                <ul class="thumbnail-list">
+                    {{#each product.thumbnails}}
+                        <li><img src="/images/{{this}}" alt="thumbnail" class="thumbnail-img"></li>
+                    {{/each}}
+                </ul>
+                <div class="container-buttons">
+                    <button class="button-add" data-id={{this._id}}>Agegar al carrito</button>
+                </div>
+            </li>
+    </ul>
+    {{else}}
+    <h3 class="no-products">No existe el producto</h3>
+{{/if}}
+
+<script>
+    async function addToCart(){
+        try{
+            const response = await ("")
+
+        }catch(error){
+
+        }
+    }
+</script>

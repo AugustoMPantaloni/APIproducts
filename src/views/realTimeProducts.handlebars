@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/css/styleProductsHandlebars.css"> 
+<a href="/" class="home-link">Página Principal</a>
 <h1 class="title-main">API para Ecommerce</h1>
 <h1 class="title-main2">Crea tu producto</h1>
 <form action="/realtimeproducts" method="POST" class="product-form" enctype="multipart/form-data">
@@ -31,7 +33,7 @@
     <button type="submit" class="form-button">Crear Producto</button>
 </form>
 
-<h2 class="title-sub">Lista de productos</h2>
+<h2 class="title-sub">Lista de productos en tiempo real</h2>
 <div id="products-container">
     {{#if products.length}}
         <ul class="product-list">
@@ -53,6 +55,17 @@
                 </li>
             {{/each}}
         </ul>
+        <div class="paginacion">
+            {{#if pagination.hasPrevPage}}
+                <a href="/realtimeproducts?page={{pagination.prevPage}}"> ⏪ Anterior</a>
+            {{/if}}
+            <p>
+                Página {{pagination.currentPage}} de {{pagination.totalPages}}
+            </p>
+            {{#if pagination.hasNextPage}}
+                <a href="/realtimeproducts?page={{pagination.nextPage}}">Siguiente ⏩ </a>
+            {{/if}}
+        </div>
     {{else}}
         <h3 class="no-products">No existen productos</h3>
     {{/if}}

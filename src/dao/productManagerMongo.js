@@ -50,7 +50,7 @@ const mongoose = require("mongoose")
 //Obtener el producto filtrado por su ID
     async function getProductById(id) {
         try{
-            const productId = await ProductsModel.findById(id)
+            const productId = await ProductsModel.findById(id).lean()
             return productId;
         } catch(error){
             console.error("Error al obtener el producto por su ID", error.message)

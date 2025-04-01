@@ -240,4 +240,140 @@ h1 {
     background-color: #218838;
 }
 
+.paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
 
+.paginacion a {
+    text-decoration: none;
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.paginacion a:hover {
+    background-color: #0056b3;
+}
+
+.paginacion p {
+    margin: 0;
+    font-weight: bold;
+}
+
+.paginacion a.disabled {
+    background-color: #cccccc;
+    pointer-events: none;
+    cursor: default;
+}
+.container-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.button-details {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+
+.button-details:hover {
+    background-color: #0056b3;
+}
+
+.button-details:active {
+    background-color: #004099;
+}
+
+.button-add {
+    background-color: #ffc107;
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+
+.button-add:hover {
+    background-color: #e0a800;
+}
+
+.button-add:active {
+    background-color: #c69500;
+}
+
+/* Estilos para el enlace */
+.realtime-link {
+    width: 200px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    background-color: #3498db;
+    padding: 12px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.3s;
+    text-align: center;
+    margin-top: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.realtime-link:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.realtime-link:active {
+    background-color: #1f6b8b;
+    transform: scale(1);
+}
+
+.container-links{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilos para el enlace de la página principal con borde de botón */
+.home-link {
+    font-size: 16px;
+    font-weight: 600;
+    color: #3498db;
+    text-decoration: none;
+    padding: 12px 18px;
+    border: 2px solid #3498db; /* Borde azul */
+    border-radius: 8px;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+/* Efecto hover: Cambia el fondo y el color del texto */
+.home-link:hover {
+    background-color: #3498db;
+    color: #fff; /* Texto blanco al hacer hover */
+    transform: translateY(-2px); /* Sube ligeramente */
+}
+
+/* Efecto active: Ajuste de color y sombra al hacer clic */
+.home-link:active {
+    background-color: #2980b9;
+    color: #fff;
+    transform: translateY(1px); /* Baja un poco al hacer clic */
+}

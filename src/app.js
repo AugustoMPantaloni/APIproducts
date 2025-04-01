@@ -9,7 +9,7 @@ const exphbs = require ("express-handlebars");
 const routerProducts = require ("./Routers/products");
 const routerCarts = require ("./Routers/carts");
 const routerRealTimeProducts = require ("./Routers/viewsRouter"); //Router para los productos en tiempo real
-const routerHome = require ("./Routers/viewsHome")//Router para la ruta raiz
+const routerViewHome = require ("./Routers/viewsHome")//Router para la ruta raiz
 
 //configuracion socket.io
 const server = http.createServer(app);
@@ -32,10 +32,10 @@ app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
 
 //Rutas
-app.get("/", routerHome.getProducts); 
+app.use("/", routerViewHome); 
+app.use("/realtimeproducts", routerRealTimeProducts(io)); //Ruta para los productos en tiempo real
 app.use("/api/products", routerProducts);
 app.use("/api/carts", routerCarts);
-app.use("/realtimeproducts", routerRealTimeProducts(io)); //Ruta para los productos en tiempo real
 app.use(errorHandler);
 
 //Servidor

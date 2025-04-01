@@ -44,7 +44,9 @@ module.exports = (io) => {
                     totalPages: products.totalPages,
                     currentPage: products.page,
                     prevPage: products.prevPage,
-                    nextPage: products.nextPage
+                    nextPage: products.nextPage,
+                    hasPrevPage: products.hasPrevPage,
+                    hasNextPage: products.hasNextPage
                 }
                 });
 
@@ -54,7 +56,9 @@ module.exports = (io) => {
                     totalPages: products.totalPages,
                     currentPage: products.page,
                     prevPage: products.prevPage,
-                    nextPage: products.nextPage
+                    nextPage: products.nextPage,
+                    hasPrevPage: products.hasPrevPage,
+                    hasNextPage: products.hasNextPage
                 }
             }); 
         }catch(error){

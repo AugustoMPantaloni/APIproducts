@@ -1,5 +1,11 @@
-<h1 class="title-main">API para Ecommerce</h1>
+<link rel="stylesheet" href="/css/styleProductsHandlebars.css"> 
+<h1 class="title-main">Bienvenido a la API de Ecommerce</h1>
+<div class="container-links">
+<a href="/realtimeproducts" class="realtime-link">Gestiona tus productos en tiempo real</a>
+<a href="" class="realtime-link">Carrito de compras</a>
+</div>
 <h2 class="title-sub">Lista de productos</h2>
+<p></p>
 {{#if products.length}}
     <ul class="product-list">
         {{#each products}}
@@ -15,9 +21,25 @@
                         <li><img src="/images/{{this}}" alt="thumbnail" class="thumbnail-img"></li>
                     {{/each}}
                 </ul>
+                <div class="container-buttons">
+                    <a href="/products/{{this._id}}" data-id={{this._id}} class="button-details">Detalles</a>
+                    <button  data-id={{this._id}} class="button-add">Agegar al carrito</button>
+                </div>
             </li>
         {{/each}}
     </ul>
+    <div class="paginacion">
+        {{#if pagination.hasPrevPage}}
+            <a href="/?page={{pagination.prevPage}}"> ⏪ Anterior</a>
+        {{/if}}
+        <p>
+            Página {{pagination.currentPage}} de {{pagination.totalPages}}
+        </p>
+        {{#if pagination.hasNextPage}}
+            <a href="/?page={{pagination.nextPage}}">Siguiente ⏩ </a>
+        {{/if}}
+    </div>
     {{else}}
     <h3 class="no-products">No existen productos</h3>
 {{/if}}
+

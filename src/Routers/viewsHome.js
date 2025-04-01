@@ -1,6 +1,11 @@
+//Dependecias
+const express = require ("express");
+const routerViewHome = express.Router();
+//ProductManager
 const {createProduct, getAllProducts, getProductById, deleteProduct, modProduct, existingCode, validateId} = require ("../dao/productManagerMongo")
 
-const getProducts = async (req, res) => {
+//Ruta GET para obtener todos los productos
+routerViewHome.get("/", async (req, res, next) => {
     try {
         const {page, limit, category, status, sort} = req.query
         const products =  await getAllProducts(page, limit, category, status, sort);
@@ -30,11 +35,43 @@ const getProducts = async (req, res) => {
             throw new Error("El parámetro 'sort' solo puede ser 'asc' o 'desc'.");
         }
 
-        res.render("home", { products:products.docs });
+        res.render("home", { 
+            products: products.docs,
+            pagination:{
+                totalPages: products.totalPages,
+                currentPage: products.page,
+                prevPage: products.prevPage,
+                nextPage: products.nextPage,
+                hasPrevPage: products.hasPrevPage,
+                hasNextPage: products.hasNextPage
+            }
+            });
     } catch (error) {
-        console.error("Error al obtener productos:", error);
-        res.status(500).send("Error interno del servidor");
+        next(error)
     }
-};
+});
 
-module.exports = {getProducts,};
+//Ruta GET para obtener el producto por su ID
+routerViewHome.get("/products/:pid", async (req, res, next)=>{
+    try{
+        const pId = req.params.pid;
+        if (!(await validateId(pId))) {  
+            throw new Error("El ID proporcionado no es valido");
+        }
+
+        const productId = await getProductById(pId);
+        if(!productId){
+            throw new Error(`No existe ningun producto con ID proporcionado`);
+        }
+        
+        res.render("products", { 
+            product: productId, 
+            pageTitle: `Detalles de ${productId.title}` 
+        });
+    }catch(error){
+        next(error)
+    }
+})
+
+
+module.exports = routerViewHome
