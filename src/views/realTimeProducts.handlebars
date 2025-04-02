@@ -115,8 +115,9 @@
                 const response = await fetch(`/realtimeproducts/${productId}`, {
                     method: 'DELETE',
                 });
-                if (!response.ok) throw new Error('Error al eliminar');
-                
+                if (!response.ok){
+                    throw new Error('Error al eliminar');
+                }
                 console.log('Producto eliminado');
                 socket.emit('requestUpdate');
             } catch (error) {
