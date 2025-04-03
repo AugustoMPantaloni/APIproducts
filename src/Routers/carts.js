@@ -20,7 +20,7 @@ routerCarts.get ("/:cid", async (req, res, next) =>{
             throw new Error("Carrito con el ID proporcionado no existe");
         }
 
-        res.status(200).json(cartById)
+        res.status(200).json({data: cartById})
     } catch (error){
         next(error)
     }
@@ -33,7 +33,8 @@ routerCarts.post("/", async (req, res, next) =>{
         
         res.status(201).json({
             mensaje: "Carrito creado con exito",
-            carritoCreado: newCart
+            carritoCreado: newCart.data,
+            cartId: newCart.data._id
         })
     }catch (error) {
         next(error);

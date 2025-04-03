@@ -152,8 +152,30 @@ module.exports = (io) => {
             }
 
             const products =  await getAllProducts();
-            io.emit("getAllProducts", products);
-            res.render("realTimeProducts", { products });
+            
+            io.emit("getAllProducts", {
+                products: products.docs,
+                pagination:{
+                    totalPages: products.totalPages,
+                    currentPage: products.page,
+                    prevPage: products.prevPage,
+                    nextPage: products.nextPage,
+                    hasPrevPage: products.hasPrevPage,
+                    hasNextPage: products.hasNextPage
+                }
+                });
+
+            res.render("realTimeProducts", {
+                products: products.docs,
+                pagination:{
+                    totalPages: products.totalPages,
+                    currentPage: products.page,
+                    prevPage: products.prevPage,
+                    nextPage: products.nextPage,
+                    hasPrevPage: products.hasPrevPage,
+                    hasNextPage: products.hasNextPage
+                }
+            }); 
         }catch(error){
             next(error);
         }

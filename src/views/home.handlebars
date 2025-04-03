@@ -3,7 +3,7 @@
 <h1 class="title-main">Bienvenido a la API de Ecommerce</h1>
 <div class="container-links">
     <a href="/realtimeproducts" class="realtime-link">Gestiona tus productos en tiempo real</a>
-    <a href="" class="realtime-link">Carrito de compras</a>
+    <a id="cartLink" href="#" class="realtime-link">Carrito de compras</a>
 </div>
 <p class="textCart">Prueba con agreagar productos al carrito de compras</p>
 <h2 class="title-sub">Lista de productos</h2>
@@ -24,8 +24,8 @@
                     {{/each}}
                 </ul>
                 <div class="container-buttons">
-                    <a href="/products/{{this._id}}" data-id={{this._id}} class="button-details">Detalles</a>
-                    <button  data-id={{this._id}} class="button-add">Agegar al carrito</button>
+                    <a href="/products/{{this._id}}" data-id="{{this._id}}" class="button-details">Detalles</a>
+                    <button onclick="addToCart(event)" data-id="{{this._id}}" class="button-add">Agegar al carrito</button>
                 </div>
             </li>
         {{/each}}
@@ -45,26 +45,53 @@
     <h3 class="no-products">No existen productos</h3>
 {{/if}}
 <script>
+    //Funcion para crear el carro de compras
     async function createCart() {
-        if (sessionStorage.getItem("cartCreated") === "true") {
+        let cartId = sessionStorage.getItem("cartId");
 
-        return; 
+        if (cartId) {
+            document.getElementById("cartLink").href =`/carts/${cartId}`;
+            return;
         }
 
         try {
-            const response = await fetch("/api/carts", {
-                method: 'POST',
-            });
-            ((NECESITO OBTENER EL ID DEL CARRO DE COMPRAS))
+            const response = await fetch("/api/carts", { method: 'POST' });
+
             if (!response.ok) {
                 throw new Error("Error en la creación del carrito de compras");
             }
-            sessionStorage.setItem("cartCreated", "true");
-            alert(`Se le creo un carrito de compras automaticamente que durara lo que dure su sesion.`)
-        } catch(error) {
+
+            const data = await response.json();
+
+            const cartId = data.cartId; 
+
+            document.getElementById("cartLink").href =`/carts/${cartId}`;
+
+            sessionStorage.setItem("cartId", cartId);
+            
+            alert(`Se ha creado un carrito de compras con ID: ${cartId}. Este durará lo que dure su sesión.`);
+        } catch (error) {
             console.error('Error:', error.message);
             alert('Error en la creación del carrito de compras');
         }
     }
-    createCart()
+    createCart();
+
+    async function addToCart(event){
+        try{
+            const cartId = sessionStorage.getItem("cartId");
+            const productId = event.target.getAttribute("data-id");
+
+            const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {method:"POST"})
+            if(!response.ok){
+                throw new Error("No se pudo agregar el producto al carrito")
+            }
+
+            alert("Se agrego el producto al carrito de compras")
+        }catch(error){
+            console.error('Error:', error.message);
+            alert("No se pudo agregar el producto al carrito");
+        }
+    }
+
 </script>

@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/css/styleDetailsProductHandlebars.css"> 
 <a href="/" class="home-link">Página Principal</a>
-<h1 class="">{{pageTitle}}</h1>
+<h1>{{pageTitle}}</h1>
 {{#if product}}
     <ul class="product-list">   
             <li class="product-item">
@@ -16,7 +16,7 @@
                     {{/each}}
                 </ul>
                 <div class="container-buttons">
-                    <button class="button-add" data-id={{this._id}}>Agegar al carrito</button>
+                    <button onclick="addToCart(event)" data-id="{{product._id}}" class="button-add">Agegar al carrito</button>
                 </div>
             </li>
     </ul>
@@ -25,12 +25,28 @@
 {{/if}}
 
 <script>
-    async function addToCart(){
+    async function addToCart(event){
         try{
-            const response = await ("")
+            const cartId = sessionStorage.getItem("cartId");
+                if (!cartId) {
+                alert("No hay un carrito activo. Recarga la página para crear uno.");
+                return;
+            }
+            const productId = event.target.getAttribute("data-id");
+                        if (!productId) {
+                alert("Error: No se pudo obtener el ID del producto.");
+                return;
+            }
 
+            const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {method:"POST"})
+            if(!response.ok){
+                throw new Error("No se pudo agregar el producto al carrito")
+            }
+
+            alert("Se agrego el producto al carrito de compras")
         }catch(error){
-
+            console.error('Error:', error.message);
+            alert("No se pudo agregar el producto al carrito");
         }
     }
 </script>

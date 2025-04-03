@@ -1,8 +1,10 @@
 //Dependecias
 const express = require ("express");
 const routerViewHome = express.Router();
-//ProductManager
-const {createProduct, getAllProducts, getProductById, deleteProduct, modProduct, existingCode, validateId} = require ("../dao/productManagerMongo")
+//Manager
+const {createProduct, getAllProducts, getProductById, deleteProduct, modProduct, existingCode, validateId} = require ("../dao/productManagerMongo");
+const { getCartById} = require ("../dao/cartsManagerMongo");
+
 
 //Ruta GET para obtener todos los productos
 routerViewHome.get("/", async (req, res, next) => {
@@ -69,6 +71,26 @@ routerViewHome.get("/products/:pid", async (req, res, next)=>{
             pageTitle: `Detalles de ${productId.title}` 
         });
     }catch(error){
+        next(error)
+    }
+})
+
+//lista los productos que pertenecen al carro de compras seleccionado
+routerViewHome.get("/carts/:cid", async (req, res, next) =>{
+    try{ 
+
+        const idCart = req.params.cid
+        if(!(await validateId(idCart))){
+            throw new Error("El ID proporcionado del Carrrito no es valido")
+        }
+
+        const cartById = await getCartById(idCart);
+        if(!cartById){
+            throw new Error("Carrito con el ID proporcionado no existe");
+        }
+
+        res.render("cart", {cart: cartById.data.toObject()})
+    } catch (error){
         next(error)
     }
 })

@@ -5,6 +5,7 @@ const path = require("path");
 const http = require ("http");
 const {Server} = require ("socket.io");
 const exphbs = require ("express-handlebars");
+const Handlebars = require("./helpers/handlebarsHelpers"); 
 //Router y controladores
 const routerProducts = require ("./Routers/products");
 const routerCarts = require ("./Routers/carts");
@@ -27,7 +28,10 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname, "..", "public"))); 
 
 //Configuracion Handlebars
-app.engine("handlebars", exphbs.engine());
+app.engine("handlebars", exphbs.engine({
+    handlebars: Handlebars
+}));
+
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
 

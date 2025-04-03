@@ -1,30 +1,75 @@
-    <h1>Carrito de Compras</h1>
-    <table border="1">
+<link rel="stylesheet" href="/css/styleCartHandlebars.css">
+
+<a href="/" class="home-link">Página Principal</a>
+
+<h1 class="cart-title">Carrito de Compras</h1>
+
+
+{{#if cart.cart.length}}
+    <table class="cart-table">
         <thead>
             <tr>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Total</th>
-                <th>Acciones</th>
+                <th class="cart-header">Producto</th>
+                <th class="cart-header">Precio</th>
+                <th class="cart-header">Cantidad</th>
+                <th class="cart-header">Total por Cantidad</th>
+                <th class="cart-header"></th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Producto 1</td>
-                <td>$10.00</td>
-                <td><input type="number" value="1" min="1"></td>
-                <td>$10.00</td>
-                <td><button>Eliminar</button></td>
-            </tr>
-            <tr>
-                <td>Producto 2</td>
-                <td>$20.00</td>
-                <td><input type="number" value="1" min="1"></td>
-                <td>$20.00</td>
-                <td><button>Eliminar</button></td>
-            </tr>
+            {{#each cart.cart}}
+                <tr class="cart-item">
+                    <td class="cart-product">{{this.product.title}}</td>
+                    <td class="cart-price">${{this.product.price}}</td>
+                    <td class="cart-quantity">{{this.quantity}}</td>
+                    <td>${{multiply this.product.price this.quantity}}</td>
+                    <td><button data-id="{{this.product._id}}" onclick="deleteProductCart(event)" class="delete-product-btn">Eliminar producto</button></td>
+                </tr>
+            {{/each}}
         </tbody>
     </table>
-    <h2>Total: $30.00</h2>
-    <button>Finalizar Compra</button>
+    <button onclick="emptyCart(event)" data-id="{{cart._id}}" class="empty-cart-btn"> Vaciar carrito</button>
+    <div class="cart-total">
+        <h3>Total: ${{cartTotal cart.cart}}</h3>
+    </div>
+
+{{else}}
+    <p class="cart-empty">Tu carrito está vacío.</p>
+{{/if}}
+
+<script>
+    async function emptyCart(event){
+        try{
+            const cartId = sessionStorage.getItem("cartId");
+
+            const response = await fetch(`/api/carts/${cartId}`,{method:"DELETE"})
+            if(!response.ok){
+                throw new Error("No se pudo vaciar el carrito de compras")
+            }
+            alert("Se vacio el carrito de compras")
+            location.reload()
+        }catch{
+            console.error('Error:', error.message);
+            alert("No se pudo vaciar el carrito de compras");
+        }
+    }
+
+    async function deleteProductCart(event){
+        try{
+            const cartId = sessionStorage.getItem("cartId");
+
+            const productId = event.target.getAttribute("data-id")
+
+            const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {method:"DELETE"})
+            if(!response.ok){
+                throw new Error("No se pudo eliminar el producto")
+            }
+
+            alert("Producto Eliminado")
+            location.reload()
+        }catch(error){
+            console.error('Error:', error.message);
+            alert("No se pudo eliminar el producto");
+        }
+    }
+</script>
