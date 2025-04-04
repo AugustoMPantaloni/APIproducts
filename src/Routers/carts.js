@@ -12,7 +12,7 @@ routerCarts.get ("/:cid", async (req, res, next) =>{
 
         const idCart = req.params.cid
         if(!(await validateId(idCart))){
-            throw new Error("El ID proporcionado del Carrrito no es valido")
+            throw new Error("El ID proporcionado del Carrito no es valido")
         }
 
         const cartById = await getCartById(idCart);
@@ -47,7 +47,7 @@ routerCarts.post("/:cid/product/:pid", async (req, res, next)=>{
         const idCart = req.params.cid;
         const idProduct = req.params.pid;
         if(!(await validateId(idCart))){
-            throw new Error("El ID proporcionado del Carrrito no es valido")
+            throw new Error("El ID proporcionado del Carrito no es valido")
         }
         if(!(await validateId(idProduct))){
             throw new Error("El ID proporcionado del Producto no es valido")
@@ -74,7 +74,7 @@ routerCarts.put("/:cid/products/:pid", async(req, res, next)=>{
         const idCart = req.params.cid;
         const idProduct = req.params.pid;
         if(!(await validateId(idCart))){
-            throw new Error("El ID proporcionado del Carrrito no es valido")
+            throw new Error("El ID proporcionado del Carrito no es valido")
         }
         if(!(await validateId(idProduct))){
             throw new Error("El ID proporcionado del Producto no es valido")
@@ -101,7 +101,7 @@ routerCarts.delete("/:cid", async(req, res, next)=>{
     try{
         const idCart = req.params.cid;
         if(!(await validateId(idCart))){
-            throw new Error("El ID proporcionado del Carrrito no es valido")
+            throw new Error("El ID proporcionado del Carrito no es valido")
         }
 
         const updateCart = await emptyCart(idCart)
@@ -120,7 +120,7 @@ routerCarts.delete("/:cid/product/:pid", async(req, res, next) =>{
         const idCart = req.params.cid;
         const idProduct = req.params.pid;
         if(!(await validateId(idCart))){
-            throw new Error("El ID proporcionado del Carrrito no es valido")
+            throw new Error("El ID proporcionado del Carrito no es valido")
         }
         if(!(await validateId(idProduct))){
             throw new Error("El ID proporcionado del Producto no es valido")
@@ -141,7 +141,7 @@ routerCarts.put("/:cid/", async (req, res, next)=>{
     try{
         const idCart = req.params.cid;
         if(!(await validateId(idCart))){
-            throw new Error("El ID proporcionado del Carrrito no es valido")
+            throw new Error("El ID proporcionado del Carrito no es valido")
         }
         
         const {products} = req.body
@@ -160,7 +160,8 @@ routerCarts.put("/:cid/", async (req, res, next)=>{
         ))
 
         if(!validateProducts){
-            throw new Error("Error en el campo del producto. Cada producto debe tener: -Un ID valido de mongoose. -Una Quantity que sea de tipo numero, entero y mayor a 0")
+            throw new Error("Error en el campo del producto. Cada producto debe tener: -Un ID valido de mongoose. -Una Quantity que sea de tipo numero, entero y mayor a 0"
+            )
         }
 
         const updateCart = await updateCartProducts(idCart, products)

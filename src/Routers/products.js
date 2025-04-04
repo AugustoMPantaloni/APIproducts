@@ -59,7 +59,7 @@ routerProducts.get("/:pid", async (req, res, next)=>{
 
         const productId = await getProductById(pId);
         if(!productId){
-            throw new Error(`No existe ningun producto con ID proporcionado`);
+            throw new Error("No existe ningun producto con el ID proporcionado");
         }
         
         res.status(200).json({mensaje:"Producto obtenido exitosamente", data: productId});
@@ -73,10 +73,10 @@ routerProducts.post("/", async (req, res, next)=>{
     try{
         const { title, description, code, price, stock, status, category, thumbnails} = req.body;
         
-        if (!title || typeof title !== "string") throw new Error("El título es obligatorio y debe ser un texto");
-        if (!description || typeof description !== "string") throw new Error("La descripción es obligatoria y debe ser un texto");
-        if (!code || typeof code !== "string") throw new Error("El código es obligatorio y debe ser un texto");
-        if (!category || typeof category !== "string") throw new Error("La categoría es obligatoria y debe ser un texto");
+        if (!title || typeof title !== "string") throw new Error("El título es obligatorio y debe ser un string");
+        if (!description || typeof description !== "string") throw new Error("La descripción es obligatoria y debe ser un string");
+        if (!code || typeof code !== "string") throw new Error("El código es obligatorio y debe ser un string");
+        if (!category || typeof category !== "string") throw new Error("La categoría es obligatoria y debe ser un string");
         if (status === undefined || typeof status !== "boolean") throw new Error("El status es obligatorio y debe ser un booleano");
 
         if(isNaN(price) || price <= 0){
@@ -91,7 +91,7 @@ routerProducts.post("/", async (req, res, next)=>{
         }
 
         if (!Array.isArray(thumbnails)) {
-            throw new Error( "Thumbnails debe ser un array");
+            throw new Error("Thumbnails debe ser un array");
         }
 
         const newProduct = await createProduct(title, description, code, price, stock, status, category, thumbnails);
@@ -133,7 +133,7 @@ routerProducts.delete("/:pid", async (req,res, next)=>{
 
         const productDelete = await deleteProduct(pId);
         if(!productDelete){
-            throw new Error("No existe ningun producto con ID proporcionado")
+            throw new Error("No existe ningun producto con el ID proporcionado")
         }
 
         res.status(200).json({Mensaje: "Producto Eliminado", productDelete})

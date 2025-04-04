@@ -21,7 +21,7 @@ const ConnectDB = require ("./db")
 ConnectDB();
 
 //Middleware 
-const errorHandler = require ("./middleware/errorHandler"); //REVISAR ERRORES, HAY MUCHOS REPETIDOS Y ESTAN MAL ORGANIZADOS.
+const errorHandler = require ("./middleware/errorHandler"); 
 const { error } = require("console");
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));

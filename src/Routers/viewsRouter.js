@@ -76,7 +76,7 @@ module.exports = (io) => {
 
             const productId = await getProductById(pId);
             if(!productId){
-                throw new Error(`No existe ningun producto con ID proporcionado`);
+                throw new Error("No existe ningun producto con el ID proporcionado");
             }
             res.status(200).json({data: productId});
         }catch(error){
@@ -90,10 +90,10 @@ module.exports = (io) => {
             const { title, description, code, price, stock, status,category} = req.body;
             const thumbnails = req.files?.map(file => file.path) || [];
 
-            if (!title || typeof title !== "string") throw new Error("El título es obligatorio y debe ser un texto");
-            if (!description || typeof description !== "string") throw new Error("La descripción es obligatoria y debe ser un texto");
-            if (!code || typeof code !== "string") throw new Error("El código es obligatorio y debe ser un texto");
-            if (!category || typeof category !== "string") throw new Error("La categoría es obligatoria y debe ser un texto");
+            if (!title || typeof title !== "string") throw new Error("El título es obligatorio y debe ser un string");
+            if (!description || typeof description !== "string") throw new Error("La descripción es obligatoria y debe ser un string");
+            if (!code || typeof code !== "string") throw new Error("El código es obligatorio y debe ser un string");
+            if (!category || typeof category !== "string") throw new Error("La categoría es obligatoria y debe ser un string");
 
             if(isNaN(price) || price <= 0){
                 throw new Error("El precio debe ser un numero y mayor a 0");
@@ -148,7 +148,7 @@ module.exports = (io) => {
 
             const productDelete = await deleteProduct(pId);
             if(!productDelete){
-                throw new Error("No existe ningun producto con ID proporcionado")
+                throw new Error("No existe ningun producto con el ID proporcionado")
             }
 
             const products =  await getAllProducts();

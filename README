@@ -1,3 +1,5 @@
 Que le falta al proyecto para poder ser funcional?
 
 Agregar SOCKET.IO para la mayoria de las funciones.
+Mejorar VISTAS con todas las funciones para poder probarlas (actualizar un producto a traves de una interfaz, aumentar y disminuir cantidades desde un boton)
+Reemplazar handlebars por otra tecnologia para las vistas.

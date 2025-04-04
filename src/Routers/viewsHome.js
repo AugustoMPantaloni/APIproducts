@@ -63,7 +63,7 @@ routerViewHome.get("/products/:pid", async (req, res, next)=>{
 
         const productId = await getProductById(pId);
         if(!productId){
-            throw new Error(`No existe ningun producto con ID proporcionado`);
+            throw new Error("No existe ningun producto con el ID proporcionado");
         }
         
         res.render("products", { 
@@ -81,7 +81,7 @@ routerViewHome.get("/carts/:cid", async (req, res, next) =>{
 
         const idCart = req.params.cid
         if(!(await validateId(idCart))){
-            throw new Error("El ID proporcionado del Carrrito no es valido")
+            throw new Error("El ID proporcionado del Carrito no es valido")
         }
 
         const cartById = await getCartById(idCart);
