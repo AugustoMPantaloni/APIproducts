@@ -6,11 +6,13 @@ const http = require ("http");
 const {Server} = require ("socket.io");
 const exphbs = require ("express-handlebars");
 const Handlebars = require("./helpers/handlebarsHelpers"); 
+require ("dotenv").config() 
+
 //Router y controladores
 const routerProducts = require ("./Routers/products");
 const routerCarts = require ("./Routers/carts");
-const routerRealTimeProducts = require ("./Routers/viewsRouter"); //Router para los productos en tiempo real
-const routerViewHome = require ("./Routers/viewsHome")//Router para la ruta raiz
+const routerRealTimeProducts = require ("./Routers/viewsRouter"); 
+const routerViewHome = require ("./Routers/viewsHome")
 
 //configuracion socket.io
 const server = http.createServer(app);
@@ -26,6 +28,7 @@ const { error } = require("console");
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname, "..", "public"))); 
+app.use(errorHandler);
 
 //Configuracion Handlebars
 app.engine("handlebars", exphbs.engine({
@@ -37,13 +40,12 @@ app.set("views", path.join(__dirname, "views"));
 
 //Rutas
 app.use("/", routerViewHome); 
-app.use("/realtimeproducts", routerRealTimeProducts(io)); //Ruta para los productos en tiempo real
+app.use("/realtimeproducts", routerRealTimeProducts(io)); 
 app.use("/api/products", routerProducts);
 app.use("/api/carts", routerCarts);
-app.use(errorHandler);
 
 //Servidor
-const PORT = 8080;
+const PORT = (process.env.PORT);
 server.listen (PORT,()=>{
     console.log(`Servidor corriendo en puerto ${PORT}`);
 })
